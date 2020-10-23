@@ -12,7 +12,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
-		for(int i = 0; i < 8; i++) {
+		for(int i = 0; i < 8; i++) { // initialize all of the squares
 			for(int j = 0; j < 8; j++) {
 				squares[i][j] = new Square();
 			}
