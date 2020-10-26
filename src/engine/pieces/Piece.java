@@ -15,16 +15,16 @@ public abstract class Piece {
 	/**
 	 * This abstract class will be implemented by all the piece types such as the King, Queen, Bishop, etc.
 	 * */
-	private Color color;
 	private BufferedImage pic;
 	private Square square;
+	private int team;
 	
-	public Piece(Square startSquare, Color color, String imgLocation) {
+	public Piece(Square startSquare, int color, String imgLocation) {
 		/**
 		 * @param imgLocation - will be a path like /resources/piece.png
 		 * */
 		square = startSquare;
-		this.color = color;
+		this.team = team;
 		
 		try {
 			File f = new File(imgLocation);
@@ -34,8 +34,11 @@ public abstract class Piece {
 		}
 	}
 	
-	public void draw(Graphics g) {
-		
+	public void draw(Graphics g, int x, int y) {
+		/**
+		 * This method will draw on a JComponent's g class using their respective BufferedImage picture.
+		 * */
+		g.drawImage(pic, x, y, null);
 	}
 	
 	public abstract ArrayList getLegalMoves(Board board); // will implement later as it's abstract

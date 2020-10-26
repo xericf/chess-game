@@ -1,24 +1,69 @@
 package engine.components;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 
+import engine.pieces.Pawn;
+
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 
 	private Square[][] squares;
+	private Color squareColor1;
+	private Color squareColor2;
+	private int squareSize = 80;
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
-		for(int i = 0; i < 8; i++) { // initialize all of the squares
-			for(int j = 0; j < 8; j++) {
-				squares[i][j] = new Square();
+		boolean colorSwitch = false;
+		squareColor1 = new Color(204, 102, 0);
+		squareColor2 = new Color(255, 193, 128);
+		for(int x = 0; x< 8; x++) { // initialize all of the squares
+			for(int y = 0; y < 8; y++) {
+				if(colorSwitch) {
+					squares[x][y] = new Square(x, y, squareSize, squareColor1);
+				} else {
+					squares[x][y] = new Square(x, y, squareSize, squareColor2);
+				}
+				colorSwitch = !colorSwitch;
 			}
+			colorSwitch = !colorSwitch; // this is to offset the column color by 1 
 		}
+		initPieces();
 	}
 	
+	public void initPieces() {
+		/**
+		 * This function will put all of the pieces into their respective squares for both white and black.
+		 * */
+		//white pieces initialize, 1= black, 0 = white;
+		for(int i = 0; i < 8; i++) {
+			squares[i][6].setPiece(new Pawn(squares[i][6], 0, "resources/wp.png"));
+		}
+		//black pieces initialize, 1= black, 0 = white;
+		for(int i = 0; i < 8; i++) {
+			squares[i][1].setPiece(new Pawn(squares[i][1], 1, "resources/bp.png"));
+		}
+		
+		
+		repaint(); // I'm not really sure if this is necessary since it drew without this method, but this is just to be sure it repaints
+	}
+	
+	@Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for(int x = 0; x< 8; x++) { // initialize all of the squares
+			for(int y = 0; y < 8; y++) {
+				squares[x][y].paintComponent(g);
+			}
+		}
+     
+    }
+
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -28,7 +73,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

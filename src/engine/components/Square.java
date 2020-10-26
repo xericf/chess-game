@@ -1,27 +1,68 @@
 package engine.components;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
+import engine.pieces.Piece;
+
 public class Square extends JComponent {
 	
+	private int y; // this will be which row the square is in
+	private int x; // this will be which column the square is in
+	private int squareSize;
+	private boolean hasPiece; // will be used to see if the piece is currently being dragged.
+	private Piece piece; // will be N, K, Q, Etc.
+	private Color color;
 	
-	
-	public Square() {
-		
+	public Square(int x, int y, int squareSize, Color color) {
+		/**
+		 * @param y - row of square
+		 * @param x - col of square
+		 * @param color - a memory reference to a Color object that is stored in the Board class
+		 * **/
+		this.y = y;
+		this.x = x;
+		this.squareSize = squareSize;
+		this.hasPiece = false;
+		this.piece = null; // empty square
+		this.color = color;
 	}
 	
-	public void setPiece() {
-		
+	public void setPiece(Piece pt) {
+		/**
+		 * @param pt - Piece class of piece.
+		 * */
+		if(pt == null) {
+			pt = null;
+			hasPiece = false;
+		} else {
+			hasPiece = true;
+			this.piece = pt;
+		}
+		repaint();
+	}
+	
+	public Piece getPiece() {
+		/**
+		 * Will just return the piece type
+		 * */
+		return this.piece;
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		/*
+		/**
 		 * This method draws the color of the square
 		 * */
 		super.paintComponent(g);
+		g.setColor(this.color);
+		g.fillRect(x*squareSize, y*squareSize, squareSize, squareSize);
+		
+		if(hasPiece && this.piece != null) { // if there's a piece in there, then draw it.
+			piece.draw(g, x*squareSize, y*squareSize);
+		}
 		
 	}
 	

@@ -15,8 +15,8 @@ import engine.scenes.Play;
 
 
 public class Window extends JFrame {
-	private int height = 900;
-	private int width = 650;
+	private int height = 860;
+	private int width = 920;
 	private Dimension winDim; // dimensions of the window
 	
 	//Variables for the scene menu
@@ -32,6 +32,7 @@ public class Window extends JFrame {
 		setTitle("Chess Trainer V1.0");
 		setLayout(new CardLayout());
 		//setLocationRelativeTo(null); // centers the frame
+		setResizable(false); // make the window not resizable
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // on close it frees the memory
 		init();
 		addComponents();
