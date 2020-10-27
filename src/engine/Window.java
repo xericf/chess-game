@@ -13,7 +13,6 @@ import engine.scenes.Analyze;
 import engine.scenes.History;
 import engine.scenes.Play;
 
-
 public class Window extends JFrame {
 	private int height = 860;
 	private int width = 920;

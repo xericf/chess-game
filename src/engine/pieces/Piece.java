@@ -18,6 +18,7 @@ public abstract class Piece {
 	private BufferedImage pic;
 	private Square square;
 	private int team;
+	private int size = 80;
 	
 	public Piece(Square startSquare, int color, String imgLocation) {
 		/**
@@ -38,7 +39,7 @@ public abstract class Piece {
 		/**
 		 * This method will draw on a JComponent's g class using their respective BufferedImage picture.
 		 * */
-		g.drawImage(pic, x, y, null);
+		g.drawImage(pic, x, y, size, size, null);
 	}
 	
 	public abstract ArrayList getLegalMoves(Board board); // will implement later as it's abstract

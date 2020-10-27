@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 import engine.pieces.Pawn;
+import engine.pieces.Rook;
 
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -42,13 +43,29 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		 * */
 		//white pieces initialize, 1= black, 0 = white;
 		for(int i = 0; i < 8; i++) {
-			squares[i][6].setPiece(new Pawn(squares[i][6], 0, "resources/wp.png"));
+			squares[i][6].setPiece(new Pawn(squares[i][6], 0, "resources/wpawn.png"));
 		}
+		squares[0][7].setPiece(new Rook(squares[0][7], 0, "resources/wrook.png"));
+		squares[7][7].setPiece(new Rook(squares[7][7], 0, "resources/wrook.png"));
+		squares[1][7].setPiece(new Rook(squares[1][7], 0, "resources/wknight.png"));
+		squares[6][7].setPiece(new Rook(squares[6][7], 0, "resources/wknight.png"));
+		squares[2][7].setPiece(new Rook(squares[2][7], 0, "resources/wbishop.png"));
+		squares[5][7].setPiece(new Rook(squares[5][7], 0, "resources/wbishop.png"));
+		squares[3][7].setPiece(new Rook(squares[3][7], 0, "resources/wqueen.png"));
+		squares[4][7].setPiece(new Rook(squares[4][7], 0, "resources/wking.png"));
+		
 		//black pieces initialize, 1= black, 0 = white;
 		for(int i = 0; i < 8; i++) {
-			squares[i][1].setPiece(new Pawn(squares[i][1], 1, "resources/bp.png"));
+			squares[i][1].setPiece(new Pawn(squares[i][1], 1, "resources/bpawn.png"));
 		}
-		
+		squares[0][0].setPiece(new Rook(squares[0][0], 1, "resources/brook.png"));
+		squares[7][0].setPiece(new Rook(squares[7][0], 1, "resources/brook.png"));
+		squares[1][0].setPiece(new Rook(squares[1][0], 1, "resources/bknight.png"));
+		squares[6][0].setPiece(new Rook(squares[6][0], 1, "resources/bknight.png"));
+		squares[2][0].setPiece(new Rook(squares[2][0], 1, "resources/bbishop.png"));
+		squares[5][0].setPiece(new Rook(squares[5][0], 1, "resources/bbishop.png"));
+		squares[3][0].setPiece(new Rook(squares[3][0], 1, "resources/bqueen.png"));
+		squares[4][0].setPiece(new Rook(squares[4][0], 1, "resources/bking.png"));
 		
 		repaint(); // I'm not really sure if this is necessary since it drew without this method, but this is just to be sure it repaints
 	}
@@ -61,7 +78,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				squares[x][y].paintComponent(g);
 			}
 		}
-     
     }
 
 	@Override
