@@ -16,7 +16,7 @@ public abstract class Piece {
 	 * This abstract class will be implemented by all the piece types such as the King, Queen, Bishop, etc.
 	 * */
 	private BufferedImage pic;
-	private Square square;
+	protected Square square;
 	private int team;
 	private int size = 80;
 	
@@ -26,13 +26,21 @@ public abstract class Piece {
 		 * */
 		square = startSquare;
 		this.team = team;
-		
 		try {
 			File f = new File(imgLocation);
 			pic = ImageIO.read(f);
 		} catch (Exception e) {
 			System.out.println("Error, the picture for " + imgLocation + " was not found!");
 		}
+	}
+	
+	public int getTeam() {
+		return this.team;
+	}
+	
+	public BufferedImage getImage() {
+		// This will be used for getting the image of the piece for dragging and stuff.
+		return pic;
 	}
 	
 	public void draw(Graphics g, int x, int y) {

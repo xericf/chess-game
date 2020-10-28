@@ -12,7 +12,7 @@ public class Square extends JComponent {
 	private int y; // this will be which row the square is in
 	private int x; // this will be which column the square is in
 	private int squareSize;
-	private boolean hasPiece; // will be used to see if the piece is currently being dragged.
+	private boolean displayPiece; // will be used to see if the piece is currently being dragged.
 	private Piece piece; // will be N, K, Q, Etc.
 	private Color color;
 	
@@ -25,9 +25,13 @@ public class Square extends JComponent {
 		this.y = y;
 		this.x = x;
 		this.squareSize = squareSize;
-		this.hasPiece = false;
+		this.displayPiece = false;
 		this.piece = null; // empty square
 		this.color = color;
+	}
+	
+	public int[] getPosition() {
+		return new int[] {x, y};
 	}
 	
 	public void setPiece(Piece pt) {
@@ -35,13 +39,17 @@ public class Square extends JComponent {
 		 * @param pt - Piece class of piece.
 		 * */
 		if(pt == null) {
-			pt = null;
-			hasPiece = false;
+			this.piece = null;
+			displayPiece = false;
 		} else {
-			hasPiece = true;
+			displayPiece = true;
 			this.piece = pt;
 		}
 		repaint();
+	}
+	
+	public void setDisplayPiece(boolean has) {
+		this.displayPiece = has;
 	}
 	
 	public Piece getPiece() {
@@ -60,7 +68,7 @@ public class Square extends JComponent {
 		g.setColor(this.color);
 		g.fillRect(x*squareSize, y*squareSize, squareSize, squareSize);
 		
-		if(hasPiece && this.piece != null) { // if there's a piece in there, then draw it.
+		if(displayPiece && this.piece != null) { // if there's a piece in there, then draw it.
 			piece.draw(g, x*squareSize, y*squareSize);
 		}
 		

@@ -5,3 +5,6 @@ Notable topics to talk about:
 
 references:
 https://iconscout.com/contributors/jemismali/icons
+
+TODO:
+- Reduce the amount of repaints there are using logic.

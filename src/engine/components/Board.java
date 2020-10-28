@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 import engine.pieces.Pawn;
+import engine.pieces.Piece;
 import engine.pieces.Rook;
 
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
@@ -17,6 +18,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Color squareColor1;
 	private Color squareColor2;
 	private int squareSize = 80;
+	
+	private int pieceX = 0;
+	private int pieceY = 0;
+	private Square pieceSquare= null;
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
@@ -35,6 +40,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			colorSwitch = !colorSwitch; // this is to offset the column color by 1 
 		}
 		initPieces();
+		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the JPanel of Board
+		addMouseMotionListener(this);
 	}
 	
 	public void initPieces() {
@@ -70,6 +77,16 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		repaint(); // I'm not really sure if this is necessary since it drew without this method, but this is just to be sure it repaints
 	}
 	
+	private Square getSquare(int x, int y) {
+		Square s = null;
+		try {
+			s = squares[(int) (Math.floor(x/squareSize))][(int) (Math.floor(y/squareSize))];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Square out of bounds");
+		}
+		return s; 
+	}
+	
 	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -78,21 +95,61 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				squares[x][y].paintComponent(g);
 			}
 		}
+        if(pieceSquare != null) {
+        	// This will draw the piece being held
+        	System.out.println();
+        	pieceSquare.getPiece().draw(g, pieceX-(squareSize/2), pieceY-(squareSize/2));
+        }
     }
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent m) {
 		// TODO Auto-generated method stub
+		pieceX = m.getPoint().x;
+		pieceY = m.getPoint().y;
+		
+		repaint();
+		System.out.println("X: " + pieceX + " Y: " + pieceY);
 		
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
+	public void mousePressed(MouseEvent m) {
 		// TODO Auto-generated method stub
+		int x = m.getPoint().x;
+		int y = m.getPoint().y;
+		Square sq = getSquare(x, y);
+		if(sq.getPiece() != null) {
+			this.pieceSquare = sq;
+			pieceSquare.setDisplayPiece(false);
+		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseReleased(MouseEvent m) {
+		int x = m.getPoint().x;
+		int y = m.getPoint().y;
+		// TODO Auto-generated method stub
+		Square sq = getSquare(x, y);
+		if(sq == pieceSquare) {
+			repaint();
+		} else if(pieceSquare != null) { // if they are not the same object and a piece is selected
+			sq.setPiece(pieceSquare.getPiece());
+			pieceSquare.setPiece(null);
+			pieceSquare.setDisplayPiece(true);
+			pieceSquare = null;
+			repaint();
+		}
+	}
+	
+
+	@Override
+	public void mouseMoved(MouseEvent m) {
+		// TODO Auto-generated method stud
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent m) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -106,19 +163,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+	
 	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	
+	public Square[][] getSquaresArray() {
+		return squares;
 	}
 
 }
