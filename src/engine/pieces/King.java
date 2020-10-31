@@ -46,11 +46,41 @@ public class King extends Piece {
 			}
 		}
 		
-		if(!hasMoved) {
-			// Will be for castling
+		if(!hasMoved && !board.isChecked()) { // If the king has not moved, and is also not currently in check.
+			// king-side castling
+			boolean clear = true; 
+			// You can use x+1 as the starting point because in the default position, the king is always in the same square.
+			for(int i = x+1; i < 7; i++) { // obviously offset x by 1 to exclude the king's square.
+				if(squares[i][y].getPiece() == null) {
+					// check threats.
+				} else {
+					clear = false;
+					break;
+				}
+			}
+			Square s = squares[7][y];
+			if(clear && s.getPiece() instanceof Rook && !((Rook) s.getPiece()).hasMoved) { // needs to be casted to rook to get the hasMoved property
+				moves.add(squares[6][y]); // This is just to change where you must drag and drop the king in order to castle.
+			}
+			
+			// Queen side castling
+			clear = true; 
+			// You can use x+1 as the starting point because in the default position, the king is always in the same square.
+			for(int i = x-1; i > 0; i--) { // obviously offset x by 1 to exclude the king's square.
+				if(squares[i][y].getPiece() == null) {
+					// check threats.
+				} else {
+					clear = false;
+					break;
+				}
+			}
+			s = squares[0][y];
+			if(clear && s.getPiece() instanceof Rook && !((Rook) s.getPiece()).hasMoved) { // needs to be casted to rook to get the hasMoved property
+				moves.add(squares[2][y]); // This is just to change where you must drag and drop the king in order to castle.
+			}
 		}
 		
 		return moves;
 	}
-
+	
 }

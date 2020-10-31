@@ -9,7 +9,6 @@ import engine.pieces.Queen;
 import engine.pieces.Rook;
 
 public class Condition {
-
 	
 	public static ArrayList<Square> getDiagonalThreats(Board b, Square currentSquare, int team){
 		/**

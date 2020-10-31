@@ -33,12 +33,15 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Cursor grabCursor = new Cursor(Cursor.HAND_CURSOR);
 	
 	private int turn;
+	private boolean isChecked;
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
 		boolean colorSwitch = false;
 		squareColor1 = new Color(204, 102, 0);
 		squareColor2 = new Color(255, 193, 128);
+		turn = 0;
+		isChecked = false;
 		for (int x = 0; x < 8; x++) { // initialize all of the squares
 			for (int y = 0; y < 8; y++) {
 				if (colorSwitch) {
@@ -119,6 +122,14 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		
 		return false;
+	}
+	
+	public int getTurn() {
+		return this.turn;
+	}
+	
+	public boolean isChecked() {
+		return this.isChecked;
 	}
 
 	@Override
