@@ -25,13 +25,34 @@ public abstract class Piece {
 		 * @param imgLocation - will be a path like /resources/piece.png
 		 * */
 		square = startSquare;
-		this.team = team;
+		this.team = color;
 		try {
 			File f = new File(imgLocation);
 			pic = ImageIO.read(f);
 		} catch (Exception e) {
 			System.out.println("Error, the picture for " + imgLocation + " was not found!");
 		}
+	}
+	
+	public boolean move(Square end) {
+		/**
+		 * This function will simply move a piece to a selected square.
+		 * @param end - Then square the piece will end up on.
+		 * */
+		square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
+		end.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
+		square.setPiece(null);
+		square = end; // reassign the currentSquare to the finishing square.
+		return true;
+	}
+	
+	public static boolean PinnedKing(Square kingSquare, Square pieceSquare) {
+		/**
+		 * @description - This function will check to see if a piece is being pinned on a friendly king.
+		 * @param kingSquare - The square the FRIENDLY king currently resides on.
+		 * @param pieceSquare - The square the selected piece resides on.
+		 * */
+		return false;
 	}
 	
 	public int getTeam() {
@@ -50,6 +71,7 @@ public abstract class Piece {
 		g.drawImage(pic, x, y, size, size, null);
 	}
 	
-	public abstract ArrayList getLegalMoves(Board board); // will implement later as it's abstract
+	// Probably will need a "ConsiderKing" function that checks to see if the piece is pinned, or if castling is not allowed.
+	public abstract ArrayList<Square> getLegalMoves(Board board); // will implement later in other classes as it's abstract
 	
 }

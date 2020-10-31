@@ -6,14 +6,26 @@ import engine.components.Board;
 import engine.components.Square;
 
 public class King extends Piece {
-
+	
+	public boolean hasMoved;
+	
 	public King(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
-		// TODO Auto-generated constructor stub
+		hasMoved = false;
+	}
+	
+	@Override
+	public boolean move(Square end) {
+		hasMoved = true;
+		square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
+		end.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
+		square.setPiece(null);
+		square = end; // reassign the currentSquare to the finishing square.
+		return true;
 	}
 
 	@Override
-	public ArrayList getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(Board board) {
 		// TODO Auto-generated method stub
 		return null;
 	}

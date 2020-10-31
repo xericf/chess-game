@@ -28,6 +28,7 @@ public class Square extends JComponent {
 		this.displayPiece = false;
 		this.piece = null; // empty square
 		this.color = color;
+		
 	}
 	
 	public int[] getPosition() {
