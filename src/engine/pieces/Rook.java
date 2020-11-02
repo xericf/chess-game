@@ -14,7 +14,21 @@ public class Rook extends Piece {
 		super(startSquare, color, imgLocation);
 		hasMoved = false;
 	}
-
+	
+	@Override
+	public boolean move(Square end) {
+		/**
+		 * We override this method to incorporate the special rule of chess where the king can't castle if the rook has moved already
+		 * */
+		if(end == null) return false;
+		square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
+		end.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
+		square.setPiece(null);
+		square = end; // reassign the currentSquare to the finishing square.
+		hasMoved = true;
+		return true;
+	}
+	
 	@Override
 	public ArrayList<Square> getLegalMoves(Board board) {
 		ArrayList<Square> moves = new ArrayList<Square>();

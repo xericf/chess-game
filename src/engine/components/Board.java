@@ -45,9 +45,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		for (int x = 0; x < 8; x++) { // initialize all of the squares
 			for (int y = 0; y < 8; y++) {
 				if (colorSwitch) {
-					squares[x][y] = new Square(x, y, squareSize, squareColor1);
+					squares[x][y] = new Square(x, y, squareSize, squareColor1, this);
 				} else {
-					squares[x][y] = new Square(x, y, squareSize, squareColor2);
+					squares[x][y] = new Square(x, y, squareSize, squareColor2, this);
 				}
 				colorSwitch = !colorSwitch;
 			}
@@ -94,10 +94,20 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					// but this is just to be sure it repaints
 	}
 
-	private Square getSquare(int x, int y) {
+	public Square getSquareFromCoord(int x, int y) {
 		Square s = null;
 		try {
 			s = squares[(int) (Math.floor(x / squareSize))][(int) (Math.floor(y / squareSize))];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Square out of bounds");
+		}
+		return s;
+	}
+	
+	public Square getSquare(int col, int row) {
+		Square s = null;
+		try {
+			s = squares[col][row];
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Square out of bounds");
 		}
@@ -159,7 +169,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		// TODO Auto-generated method stub
 		int x = m.getPoint().x;
 		int y = m.getPoint().y;
-		Square sq = getSquare(x, y);
+		Square sq = getSquareFromCoord(x, y);
 		if (sq.getPiece() != null) {
 			this.pieceSquare = sq;
 			pieceSquare.setDisplayPiece(false);
@@ -172,7 +182,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		int x = m.getPoint().x;
 		int y = m.getPoint().y;
 		// TODO Auto-generated method stub
-		Square sq = getSquare(x, y);
+		Square sq = getSquareFromCoord(x, y);
 		if (sq == pieceSquare || sq == null) {
 			pieceSquare.setDisplayPiece(true);
 			pieceSquare = null;

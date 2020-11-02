@@ -16,11 +16,29 @@ public class King extends Piece {
 	
 	@Override
 	public boolean move(Square end) {
-		hasMoved = true;
+		/**
+		 * We override this method to incorporate the special rule of chess where the king can't castle if the king has moved already
+		 * */
+		if(end == null) return false;
 		square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
 		end.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
 		square.setPiece(null);
 		square = end; // reassign the currentSquare to the finishing square.
+		int[] p = end.getPosition();
+		Board b = square.getBoard();
+		if(!hasMoved) {
+			// If end square points to one of these x positions, that means the rook is still on the default square and there's no checks to prevent castling because of the getLegalMoves function
+			if(p[0] == 2) {
+				Square rookSquare = b.getSquare(0, p[1]);
+				Square destSquare = b.getSquare(3, p[1]);
+				rookSquare.getPiece().move(destSquare);
+			} else if(p[0] == 6) {
+				Square rookSquare = b.getSquare(7, p[1]);
+				Square destSquare = b.getSquare(5, p[1]);
+				rookSquare.getPiece().move(destSquare);
+			}
+		}
+		hasMoved = true;
 		return true;
 	}
 

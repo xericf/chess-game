@@ -16,8 +16,9 @@ public class Square extends JComponent {
 	private boolean displayPiece; // will be used to see if the piece is currently being dragged.
 	private Piece piece; // will be N, K, Q, Etc.
 	private Color color;
+	private Board board;
 	
-	public Square(int x, int y, int squareSize, Color color) {
+	public Square(int x, int y, int squareSize, Color color, Board b) {
 		/**
 		 * @param y - row of square
 		 * @param x - col of square
@@ -25,11 +26,16 @@ public class Square extends JComponent {
 		 * **/
 		this.y = y;
 		this.x = x;
+		this.board = b;
 		this.squareSize = squareSize;
 		this.displayPiece = false;
 		this.piece = null; // empty square
 		this.color = color;
 		
+	}
+	
+	public Board getBoard() {
+		return this.board;
 	}
 	
 	public int[] getPosition() {

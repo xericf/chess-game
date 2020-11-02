@@ -39,6 +39,7 @@ public abstract class Piece {
 		 * This function will simply move a piece to a selected square.
 		 * @param end - Then square the piece will end up on.
 		 * */
+		if(end == null) return false;
 		square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
 		end.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
 		square.setPiece(null);
