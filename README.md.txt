@@ -9,6 +9,10 @@ https://iconscout.com/contributors/jemismali/icons
 TODO:
 - Reduce the amount of repaints there are using logic.
 - INCLUDE KING AND PAWN THREATS IN CONDITION CLASS.
+- In the condition class methods for checking the threats of a square, the loop will not break if it sees a teamed piece first, this is to provide a really easy way to check if a 
+piece is pinned to the king, simply run all of the methods onto the king, and then reverse the vectors for each of the found threats
+and figure out if a piece lies between the king and a threat. If it is, deny moving the piece IN THE WRONG DIRECTION. You could potentially
+do this by making a testMove function, which will see if the threat kills the king after an attempted move.
 
 The way the castling will be set up is that it will only consider blocking checks from the queen and bishop in the diagonalThreats function, however
 the enemy king could also block castling. So maybe later implement that. Also pawns need to be considered.

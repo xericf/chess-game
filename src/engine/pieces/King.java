@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import engine.components.Board;
 import engine.components.Square;
+import engine.components.Condition;
 
 public class King extends Piece {
 	
@@ -41,7 +42,17 @@ public class King extends Piece {
 		hasMoved = true;
 		return true;
 	}
-
+	
+	public boolean isSquareSafe(Board board, Square s, int team) {;
+	
+		if(Condition.getKnightThreats(board, s, team).size() != 0
+				|| Condition.getDiagonalThreats(board, s, team).size() != 0
+				|| Condition.getStraightThreats(board, s, team).size() != 0) {
+			return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public ArrayList<Square> getLegalMoves(Board board) {
 		ArrayList<Square> moves = new ArrayList<Square>();
@@ -56,7 +67,9 @@ public class King extends Piece {
 				try {
 					Square s = squares[x+i][y+j];
 					if(s != this.square && (s.getPiece() == null || s.getPiece().getTeam() != team)) { // need to check if it's not this.square to get rid of its current square
-						moves.add(s);
+						if(isSquareSafe(board, s, team)) {
+							moves.add(s);
+						}
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
 					continue; // Simply continue if it is out of bounds onto the next possible move

@@ -46,8 +46,8 @@ public class Condition {
 				if (s.getPiece().getTeam() != team && (p instanceof Bishop || p instanceof Queen)){ // if it is either a queen or a bishop on the diagonal, it is considered a threat
 					threats.add(s); // if the piece is not on the same team, we must break the loop and consider the threat.
 					break;
-				} else {
-					break; // if the piece is on the same team, we must break the loop.
+				} else if(s.getPiece().getTeam() != team) {
+					break;
 				}
 			}
 		}
@@ -80,6 +80,9 @@ public class Condition {
 				{0, -1}
 		};
 		for(int i = 0; i < vectors.length; i++) {
+			if(false) {
+				// Check for pawn threats and king threats
+			}
 			for(int j = 0; j < vectorDistance[i]; j++) {
 				Square s = squares[x + (vectors[i][0]*(j+1))][y + (vectors[i][1] * (j+1))]; // j+1 will equal the magnitude of the vector since vectorDistance will be 0 indexed.
 				if(s.getPiece() == null) {
@@ -89,8 +92,8 @@ public class Condition {
 				if (p.getTeam() != team && (p instanceof Rook || p instanceof Queen)){
 					threats.add(s); // if the piece is not on the same team, we can't capture the pieces behind it.
 					break;
-				} else {
-					break; // if the piece is on the same team, we must break the loop.
+				} else if(s.getPiece().getTeam() != team) {
+					break;
 				}
 			}
 		}
@@ -126,5 +129,14 @@ public class Condition {
 		}
 		
 		return threats;
+	}
+	
+	public static boolean PinnedPiece(Square kingSquare, Square pieceSquare) {
+		/**
+		 * @description - This function will check to see if a piece is being pinned on a friendly king.
+		 * @param kingSquare - The square the FRIENDLY king currently resides on.
+		 * @param pieceSquare - The square the selected piece resides on.
+		 * */
+		return false;
 	}
 }

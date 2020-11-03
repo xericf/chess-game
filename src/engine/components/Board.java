@@ -127,6 +127,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		for(int i = 0; i < legalMoves.size(); i++) {
 			if(legalMoves.get(i) == end) {
 				p.move(end);
+				turn = turn == 1 ? 0 : 1;
 				return true;
 			}
 		}
@@ -170,7 +171,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		int x = m.getPoint().x;
 		int y = m.getPoint().y;
 		Square sq = getSquareFromCoord(x, y);
-		if (sq.getPiece() != null) {
+		if (sq.getPiece() != null && sq.getPiece().getTeam() == turn) {
 			this.pieceSquare = sq;
 			pieceSquare.setDisplayPiece(false);
 			setCursor(grabCursor);
