@@ -25,6 +25,8 @@ public class Condition {
 	}
 	
 	public boolean inCheck() {
+		
+		
 		return false;
 	}
 	
