@@ -10,7 +10,7 @@ public class Pawn extends Piece {
 	public Pawn(Square startSquare, int team, String imgLocation) {
 		super(startSquare, team, imgLocation); // will just call the Piece constructor..
 	}
-
+	
 	@Override
 	public ArrayList<Square> getLegalMoves(Board board) {
 		/**

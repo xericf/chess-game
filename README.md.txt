@@ -14,6 +14,8 @@ piece is pinned to the king, simply run all of the methods onto the king, and th
 and figure out if a piece lies between the king and a threat. If it is, deny moving the piece IN THE WRONG DIRECTION. You could potentially
 do this by making a testMove function, which will see if the threat kills the king after an attempted move.
 
+Remember, no legal moves on king and it is in checvk means checkmate, if it is not in check then it is stalemate.
+
 The way the castling will be set up is that it will only consider blocking checks from the queen and bishop in the diagonalThreats function, however
 the enemy king could also block castling. So maybe later implement that. Also pawns need to be considered.
 

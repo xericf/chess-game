@@ -51,6 +51,10 @@ public abstract class Piece {
 		return this.team;
 	}
 	
+	public Square getSquare() {
+		return this.square;
+	}
+	
 	public BufferedImage getImage() {
 		// This will be used for getting the image of the piece for dragging and stuff.
 		return pic;

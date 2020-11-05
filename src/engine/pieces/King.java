@@ -47,7 +47,8 @@ public class King extends Piece {
 	
 		if(Condition.getKnightThreats(board, s, team).size() != 0
 				|| Condition.getDiagonalThreats(board, s, team).size() != 0
-				|| Condition.getStraightThreats(board, s, team).size() != 0) {
+				|| Condition.getStraightThreats(board, s, team).size() != 0
+				|| Condition.getPawnThreats(board, s ,team).size() != 0) {
 			return false;
 		}
 		return true;
@@ -55,6 +56,7 @@ public class King extends Piece {
 	
 	@Override
 	public ArrayList<Square> getLegalMoves(Board board) {
+		
 		ArrayList<Square> moves = new ArrayList<Square>();
 		Square[][] squares = board.getSquaresArray();
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value

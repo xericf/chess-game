@@ -3,13 +3,32 @@ package engine.components;
 import java.util.ArrayList;
 
 import engine.pieces.Bishop;
+import engine.pieces.King;
 import engine.pieces.Knight;
+import engine.pieces.Pawn;
 import engine.pieces.Piece;
 import engine.pieces.Queen;
 import engine.pieces.Rook;
 
 public class Condition {
 	
+	public King wk;
+	public King bk;
+	public boolean bc;
+	public boolean wc;
+	
+	public Condition(King wk, King bk) {
+		this.wk = wk;
+		this.bk = bk;
+		this.bc = false;
+		this.wc = false;
+	}
+	
+	public boolean inCheck() {
+		return false;
+	}
+	
+
 	public static ArrayList<Square> getDiagonalThreats(Board b, Square currentSquare, int team){
 		/**
 		 * @description - Will return an ArrayList of threats that could come from the diagonal. Used to check for checkmate and castling rights. 
@@ -55,6 +74,41 @@ public class Condition {
 		return threats;
 	}
 	
+	public static ArrayList<Square> getPawnThreats(Board b, Square currentSquare, int team){ 
+		ArrayList<Square> threats = new ArrayList<Square>();
+		Square[][] squares = b.getSquaresArray();
+		int[] position = currentSquare.getPosition(); // specifying this in reference to the protected square Square value
+		int x = position[0];
+		int y = position[1];
+		
+		if(team == 0) { // white
+			Square cs = x > 0 && y > 0 ? squares[x-1][y-1] : null;
+			if(cs != null &&  cs.getPiece() != null && cs.getPiece() instanceof Pawn && cs.getPiece().getTeam() != team) {
+				threats.add(cs);
+			}
+			cs = x < 7 && y > 0 ? squares[x+1][y-1] : null;
+			if(cs != null  &&  cs.getPiece() != null && cs.getPiece() instanceof Pawn && cs.getPiece().getTeam() != team) {
+				threats.add(cs);
+			}
+		} else if(team == 1) { // black
+			Square cs = x > 0 && y < 7 ? squares[x-1][y+1] : null;
+			if(cs != null && cs.getPiece() != null && cs.getPiece() instanceof Pawn && cs.getPiece().getTeam() != team) {
+				threats.add(cs);
+			}
+			cs = x < 7 && y < 7 ? squares[x+1][y+1] : null;
+			if(cs != null  && cs.getPiece() != null && cs.getPiece() instanceof Pawn && cs.getPiece().getTeam() != team) {
+				threats.add(cs);
+			}
+		}
+		
+		return threats;
+	}
+	
+	public static ArrayList<Square> getKingThreats(Board b, Square currentSquare, int team) {
+		
+		return null;
+	}
+	
 	public static ArrayList<Square> getStraightThreats(Board b, Square currentSquare, int team){
 		/**
 		 * @description - Will return an ArrayList of threats that could come from straight lines. Used to check for checkmate and castling rights. 
@@ -80,9 +134,6 @@ public class Condition {
 				{0, -1}
 		};
 		for(int i = 0; i < vectors.length; i++) {
-			if(false) {
-				// Check for pawn threats and king threats
-			}
 			for(int j = 0; j < vectorDistance[i]; j++) {
 				Square s = squares[x + (vectors[i][0]*(j+1))][y + (vectors[i][1] * (j+1))]; // j+1 will equal the magnitude of the vector since vectorDistance will be 0 indexed.
 				if(s.getPiece() == null) {
