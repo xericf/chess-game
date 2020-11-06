@@ -16,6 +16,7 @@ public class Condition {
 	public King bk;
 	public boolean bc;
 	public boolean wc;
+	public Board board;
 	
 	public Condition(King wk, King bk) {
 		this.wk = wk;
@@ -24,14 +25,25 @@ public class Condition {
 		this.wc = false;
 	}
 	
-	public boolean inCheck() {
-		
+	
+	public boolean inCheck(int team) {
+		King k = team == 0 ? wk : bk;
+		Square ks = k.getSquare();
+
 		
 		return false;
 	}
 	
-
-	public static ArrayList<Square> getDiagonalThreats(Board b, Square currentSquare, int team){
+	public boolean checkMate(int team) {
+		
+		return false;
+	}
+	
+	public boolean checkStale(int team) {
+		return false;
+	}
+	
+	public static ArrayList<Square> getDiagonalThreats(Square[][] squares, Square currentSquare, int team){
 		/**
 		 * @description - Will return an ArrayList of threats that could come from the diagonal. Used to check for checkmate and castling rights. 
 		 * @param b- will simply be the board
@@ -40,7 +52,7 @@ public class Condition {
 		 * */
 		
 		ArrayList<Square> threats = new ArrayList<Square>();
-		Square[][] squares = b.getSquaresArray();
+
 		int[] position = currentSquare.getPosition(); // specifying this in reference to the protected square Square value
 		int x = position[0];
 		int y = position[1];
@@ -67,8 +79,8 @@ public class Condition {
 				if (s.getPiece().getTeam() != team && (p instanceof Bishop || p instanceof Queen)){ // if it is either a queen or a bishop on the diagonal, it is considered a threat
 					threats.add(s); // if the piece is not on the same team, we must break the loop and consider the threat.
 					break;
-				} else if(s.getPiece().getTeam() != team) {
-					break;
+				} else {
+					break; // if it is on friendly team or not the correct piece.
 				}
 			}
 		}
@@ -76,9 +88,9 @@ public class Condition {
 		return threats;
 	}
 	
-	public static ArrayList<Square> getPawnThreats(Board b, Square currentSquare, int team){ 
+	public static ArrayList<Square> getPawnThreats(Square[][] squares, Square currentSquare, int team){ 
 		ArrayList<Square> threats = new ArrayList<Square>();
-		Square[][] squares = b.getSquaresArray();
+		
 		int[] position = currentSquare.getPosition(); // specifying this in reference to the protected square Square value
 		int x = position[0];
 		int y = position[1];
@@ -106,12 +118,29 @@ public class Condition {
 		return threats;
 	}
 	
-	public static ArrayList<Square> getKingThreats(Board b, Square currentSquare, int team) {
+	public static ArrayList<Square> getKingThreats(Square[][] squares, Square currentSquare, int team) {
+		ArrayList<Square> threats = new ArrayList<Square>();
+		int[] position = currentSquare.getPosition(); // specifying this in reference to the protected square Square value
+		int x = position[0];
+		int y = position[1];
 		
-		return null;
+		for(int i = -1; i <= 1; i++) {
+			for(int j = -1; j <= 1; j++) {
+				try {
+					Square s = squares[x+i][y+j];
+					if(s != currentSquare && s.getPiece() != null && s.getPiece().getTeam() != team && s.getPiece() instanceof King) { // need to check if it's not this.square to get rid of its current square
+						threats.add(s);
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					continue; // Simply continue if it is out of bounds onto the next possible move
+				}
+			}
+		}
+		
+		return threats;
 	}
 	
-	public static ArrayList<Square> getStraightThreats(Board b, Square currentSquare, int team){
+	public static ArrayList<Square> getStraightThreats(Square[][] squares, Square currentSquare, int team){
 		/**
 		 * @description - Will return an ArrayList of threats that could come from straight lines. Used to check for checkmate and castling rights. 
 		 * @param b- will simply be the board
@@ -119,7 +148,7 @@ public class Condition {
 		 * @param team - The team that is friendly, so threats must come from different team values.
 		 * */
 		ArrayList<Square> threats = new ArrayList<Square>();
-		Square[][] squares = b.getSquaresArray();
+
 		int[] position = currentSquare.getPosition(); // specifying this in reference to the protected square Square value
 		int x = position[0];
 		int y = position[1];
@@ -145,17 +174,16 @@ public class Condition {
 				if (p.getTeam() != team && (p instanceof Rook || p instanceof Queen)){
 					threats.add(s); // if the piece is not on the same team, we can't capture the pieces behind it.
 					break;
-				} else if(s.getPiece().getTeam() != team) {
-					break;
+				} else {
+					break; // if it is on friendly team or not the correct piece
 				}
 			}
 		}
 		return threats;
 	}
 	
-	public static ArrayList<Square> getKnightThreats(Board b, Square currentSquare, int team){
+	public static ArrayList<Square> getKnightThreats(Square[][] squares, Square currentSquare, int team){
 		ArrayList<Square> threats = new ArrayList<Square>();
-		Square[][] squares = b.getSquaresArray();
 		int[] position = currentSquare.getPosition(); // specifying this in reference to the protected square Square value
 		int x = position[0];
 		int y = position[1];

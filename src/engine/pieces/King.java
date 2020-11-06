@@ -44,11 +44,12 @@ public class King extends Piece {
 	}
 	
 	public boolean isSquareSafe(Board board, Square s, int team) {;
-	
-		if(Condition.getKnightThreats(board, s, team).size() != 0
-				|| Condition.getDiagonalThreats(board, s, team).size() != 0
-				|| Condition.getStraightThreats(board, s, team).size() != 0
-				|| Condition.getPawnThreats(board, s ,team).size() != 0) {
+		Square[][] arr = board.getSquaresArray();
+		if(Condition.getKnightThreats(arr, s, team).size() != 0
+				|| Condition.getDiagonalThreats(arr, s, team).size() != 0
+				|| Condition.getStraightThreats(arr, s, team).size() != 0
+				|| Condition.getPawnThreats(arr, s ,team).size() != 0
+				|| Condition.getKingThreats(arr, s, team).size() != 0) {
 			return false;
 		}
 		return true;

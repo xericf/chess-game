@@ -55,7 +55,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			colorSwitch = !colorSwitch; // this is to offset the column color by 1
 		}
 		initPieces();
-		condition = new Condition((King) squares[3][7].getPiece(), (King) squares[3][0].getPiece());
+		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece());
 		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the
 								// JPanel of Board
 		addMouseMotionListener(this);
