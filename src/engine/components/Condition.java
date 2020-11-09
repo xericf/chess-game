@@ -27,9 +27,17 @@ public class Condition {
 	
 	
 	public boolean inCheck(int team) {
+		// I guess this function will only be used for the main board and only used when the opponent checks the king?
 		King k = team == 0 ? wk : bk;
 		Square ks = k.getSquare();
-
+		Square[][] arr = board.getSquaresArray();
+		if(Condition.getKnightThreats(arr, ks, team).size() != 0
+				|| Condition.getDiagonalThreats(arr, ks, team).size() != 0
+				|| Condition.getStraightThreats(arr, ks, team).size() != 0
+				|| Condition.getPawnThreats(arr, ks ,team).size() != 0
+				|| Condition.getKingThreats(arr, ks, team).size() != 0) {
+			return true;
+		}
 		
 		return false;
 	}
