@@ -48,7 +48,7 @@ public class Square extends JComponent {
 		 * */
 		if(pt == null) {
 			this.piece = null;
-			displayPiece = false;
+			displayPiece = true;
 		} else {
 			displayPiece = true;
 			this.piece = pt;

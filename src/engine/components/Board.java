@@ -55,7 +55,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			colorSwitch = !colorSwitch; // this is to offset the column color by 1
 		}
 		initPieces();
-		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece());
+		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), this);
 		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the
 								// JPanel of Board
 		addMouseMotionListener(this);
@@ -95,7 +95,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		repaint(); // I'm not really sure if this is necessary since it drew without this method,
 					// but this is just to be sure it repaints
 	}
-
+	
 	public Square getSquareFromCoord(int x, int y) {
 		Square s = null;
 		try {
@@ -117,18 +117,22 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	}
 	
 	public boolean AttemptMove(Square start, Square end) {
-		
-		//Consider if piece is pinned first.
-		if(false) { //Place holder to check if the piece is pinned
-			return false;
-		}
-		
 		Piece p = start.getPiece();
+		Piece savedPiece = end.getPiece(); // this piece will be if the move is not allowed, and it will replace the
+		// end square with it again if the king is still in check.
 		ArrayList<Square> legalMoves = p.getLegalMoves(this);
 		if(legalMoves == null) return false;
 		for(int i = 0; i < legalMoves.size(); i++) {
 			if(legalMoves.get(i) == end) {
 				p.move(end);
+				if(condition.inCheck(turn)) { 
+					// Essentially this will reverse the move if the king is put in check or already in check from the move.
+					end.setPiece(savedPiece);
+					start.setPiece(p);
+					p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
+					if(savedPiece != null) savedPiece.setSquare(end); // this if statement is important because savedPiece is not guaranteed to be a Piece
+					return false;
+				}
 				turn = turn == 1 ? 0 : 1;
 				return true;
 			}
@@ -193,7 +197,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			boolean result = AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
 				// Could check for checkmate and stalemate in this block.
-			
+				
 			} else {
 				pieceSquare.setDisplayPiece(true);
 			}

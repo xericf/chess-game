@@ -18,11 +18,12 @@ public class Condition {
 	public boolean wc;
 	public Board board;
 	
-	public Condition(King wk, King bk) {
+	public Condition(King wk, King bk, Board b) {
 		this.wk = wk;
 		this.bk = bk;
 		this.bc = false;
 		this.wc = false;
+		this.board = b;
 	}
 	
 	

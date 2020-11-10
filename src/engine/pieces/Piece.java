@@ -51,6 +51,10 @@ public abstract class Piece {
 		return this.team;
 	}
 	
+	public void setSquare(Square s) {
+		this.square = s;
+	}
+	
 	public Square getSquare() {
 		return this.square;
 	}
