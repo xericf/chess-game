@@ -1,6 +1,7 @@
 package engine.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import engine.pieces.Bishop;
 import engine.pieces.King;
@@ -14,15 +15,15 @@ public class Condition {
 	
 	public King wk;
 	public King bk;
-	public boolean bc;
-	public boolean wc;
+	public Piece[] bp;
+	public Piece[] wp;
 	public Board board;
 	
-	public Condition(King wk, King bk, Board b) {
+	public Condition(King wk, King bk, Piece[] blackPieces, Piece[] whitePieces, Board b) {
 		this.wk = wk;
 		this.bk = bk;
-		this.bc = false;
-		this.wc = false;
+		this.bp = blackPieces;
+		this.wp = whitePieces;
 		this.board = b;
 	}
 	
@@ -43,12 +44,41 @@ public class Condition {
 		return false;
 	}
 	
-	public boolean checkMate(int team) {
+	public int checkWin(int team) {
+		/**
+		 * @desc - checks whether or not the selected team is in checkmate OR stalemate based on their piece's legal moves.
+		 * @returns: 0 = in progress game, 1 = checkmated king, 2 = stalemated
+		 * */
 		
-		return false;
+		Piece[] fp = team == 0 ? wp : bp; // acronym for "friendly pieces"
+		for(int i = 0; i < fp.length; i++) {
+			if(fp[i].isAlive() && HasMove(fp[i], team)) return 0; // has move therefore game is not done
+		}
+		if(!inCheck(team)) return 2; // if it's not in check, it's stalemate
+		return 1; // checkmate
 	}
 	
-	public boolean checkStale(int team) {
+	private boolean HasMove(Piece p, int team) {
+		Square start = p.getSquare();
+		ArrayList<Square> legalMoves = p.getLegalMoves(board);
+		if(legalMoves == null) return false;
+		for(int i = 0; i < legalMoves.size(); i++) {
+			Square end = legalMoves.get(i);
+			Piece savedPiece = end.getPiece(); 
+			p.move(end);
+			if(inCheck(team)) { // Essentially this will reverse the move if the king is put in check or already in check from the move.
+				end.setPiece(savedPiece);
+				start.setPiece(p);
+				p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
+				if(savedPiece != null) savedPiece.setSquare(end); 
+			} else {
+				end.setPiece(savedPiece);
+				start.setPiece(p);
+				p.setSquare(start); 
+				if(savedPiece != null) savedPiece.setSquare(end); 
+				return true;
+			}
+		}
 		return false;
 	}
 	

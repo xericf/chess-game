@@ -19,6 +19,7 @@ public abstract class Piece {
 	protected Square square;
 	private int team;
 	private int size = 80;
+	private boolean isAlive = true;
 	
 	public Piece(Square startSquare, int color, String imgLocation) {
 		/**
@@ -45,6 +46,14 @@ public abstract class Piece {
 		square.setPiece(null);
 		square = end; // reassign the currentSquare to the finishing square.
 		return true;
+	}
+
+	public void setAlive(boolean a) {
+		this.isAlive = a;
+	}
+	
+	public boolean isAlive() {
+		return this.isAlive;
 	}
 	
 	public int getTeam() {

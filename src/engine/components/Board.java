@@ -55,7 +55,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			colorSwitch = !colorSwitch; // this is to offset the column color by 1
 		}
 		initPieces();
-		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), this);
+		Piece[] bp = new Piece[16];
+		Piece[] wp = new Piece[16];
+		for(int i = 0; i < 16; i++) {
+			bp[i] = squares[i%8][i/8].getPiece(); // this is simply taking advantage of integer flooring to get the row and column of each piece
+			wp[i] = squares[i%8][i/8 + 6].getPiece();
+		}
+		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp, this);
 		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the
 								// JPanel of Board
 		addMouseMotionListener(this);
@@ -134,6 +140,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					return false;
 				}
 				turn = turn == 1 ? 0 : 1;
+				// Insurmountably important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
+				if(savedPiece != null) savedPiece.setAlive(false);  
 				return true;
 			}
 		}
@@ -197,7 +205,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			boolean result = AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
 				// Could check for checkmate and stalemate in this block.
-				
+				System.out.println(condition.checkWin(turn));
 			} else {
 				pieceSquare.setDisplayPiece(true);
 			}
