@@ -27,6 +27,11 @@ public class Condition {
 		this.board = b;
 	}
 	
+	public Piece[] getPieceArray(int team) {
+		Piece[] arr = team == 0 ? wp : bp;
+		return arr;
+	}
+	
 	
 	public boolean inCheck(int team) {
 		// I guess this function will only be used for the main board and only used when the opponent checks the king?

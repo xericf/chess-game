@@ -142,6 +142,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				turn = turn == 1 ? 0 : 1;
 				// Insurmountably important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
 				if(savedPiece != null) savedPiece.setAlive(false);  
+				// Need to accept pawn promotion here.
 				return true;
 			}
 		}
@@ -155,6 +156,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	
 	public boolean isChecked() {
 		return this.isChecked;
+	}
+	
+	public Condition getConditionObj() {
+		return this.condition;
 	}
 
 	@Override
@@ -205,7 +210,16 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			boolean result = AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
 				// Could check for checkmate and stalemate in this block.
-				System.out.println(condition.checkWin(turn));
+				switch(condition.checkWin(turn)) {
+				case 0:
+					break;
+				case 1:
+					System.out.println("Checkmate");
+					break;
+				case 2:
+					System.out.println("Stalemate");
+					break;
+				}
 			} else {
 				pieceSquare.setDisplayPiece(true);
 			}
