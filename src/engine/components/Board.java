@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import engine.pieces.Bishop;
@@ -35,6 +36,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Condition condition;
 	private int turn;
 	private boolean isChecked;
+	
+	
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
@@ -139,15 +142,56 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					if(savedPiece != null) savedPiece.setSquare(end); // this if statement is important because savedPiece is not guaranteed to be a Piece
 					return false;
 				}
-				turn = turn == 1 ? 0 : 1;
 				// Insurmountably important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
 				if(savedPiece != null) savedPiece.setAlive(false);  
-				// Need to accept pawn promotion here.
+				// Pawn promotion check
+				int yCoord = end.getPosition()[1];
+				if(p instanceof Pawn && (yCoord == 0 || yCoord == 7)) {
+					p = checkPawnPromotion(end); // reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
+					end.setPiece(p); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
+				}
+				turn = turn == 1 ? 0 : 1; // This flips the turn to the other player, important that it's last.
 				return true;
 			}
 		}
 		
 		return false;
+	}
+	
+	public Piece checkPawnPromotion(Square s) {
+		/**
+		 * @returns Rook - Rook promotion
+		 * @returns Bishop - Bishop Promotion
+		 * @returns Knight - Knight Promotion
+		 * @returns Queen - Queen Promotion
+		 * */
+		String prefix = turn == 0 ? "w" : "b"; // white or black that will be added to image string
+		String[] buttons = {"Rook", "Bishop", "Knight", "Queen"};
+		int option =  JOptionPane.showOptionDialog(this,
+				"Choose the piece you want to promote to:",
+				"Pawn Promotion",
+				 JOptionPane.DEFAULT_OPTION,
+				 JOptionPane.PLAIN_MESSAGE,
+				null,
+				buttons, // give the buttons
+				buttons[3] // This is the default selection for the dialog -- will be queen if you don't choose anything
+				);
+		Piece data = null;
+		switch(option) {
+			case 0:
+				data = new Rook(s, turn, "resources/"+ prefix + "rook.png");
+				break;
+			case 1:
+				data = new Bishop(s, turn, "resources/"+ prefix + "bishop.png");
+				break;	
+			case 2:
+				data = new Knight(s, turn, "resources/"+ prefix + "knight.png");
+				break;
+			case 3:
+				data = new Queen(s, turn, "resources/"+ prefix + "queen.png");
+				break;
+		}
+		return data;
 	}
 	
 	public int getTurn() {
