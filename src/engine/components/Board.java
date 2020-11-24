@@ -36,7 +36,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Condition condition;
 	private int turn;
 	private boolean isChecked;
-	
+	private int turnNumber;
 	
 	
 	public Board() {
@@ -105,6 +105,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					// but this is just to be sure it repaints
 	}
 	
+	public int getTurnNumber() {
+		return this.turnNumber;
+	}
+	
 	public Square getSquareFromCoord(int x, int y) {
 		Square s = null;
 		try {
@@ -150,6 +154,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					p = checkPawnPromotion(end); // reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
 					end.setPiece(p); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
 				}
+				turnNumber++;
 				turn = turn == 1 ? 0 : 1; // This flips the turn to the other player, important that it's last.
 				return true;
 			}

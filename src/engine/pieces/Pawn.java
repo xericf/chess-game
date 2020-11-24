@@ -7,11 +7,21 @@ import engine.components.Condition;
 import engine.components.Square;
 
 public class Pawn extends Piece {
-
+	int turnMoved = -1;
 	public Pawn(Square startSquare, int team, String imgLocation) {
 		super(startSquare, team, imgLocation); // will just call the Piece constructor..
 	}
 	
+	@Override
+	public boolean move(Square end) {
+		if(end == null) return false;
+		square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
+		end.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
+		square.setPiece(null);
+		square = end; // reassign the currentSquare to the finishing square.
+		if(turnMoved == -1) turnMoved = end.getBoard().getTurnNumber();
+		return true;
+	}
 	
 	
 	@Override
