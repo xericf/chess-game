@@ -46,13 +46,9 @@ public class Square extends JComponent {
 		/**
 		 * @param pt - Piece class of piece.
 		 * */
-		if(pt == null) {
-			this.piece = null;
-			displayPiece = true;
-		} else {
-			displayPiece = true;
-			this.piece = pt;
-		}
+		displayPiece = true;
+		if(this.piece != null) this.piece.setAlive(false); // this will make the @Condition.HasMove function less expensive to run
+		this.piece = pt; // reassign new piece.
 		repaint();
 	}
 	

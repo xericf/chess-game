@@ -21,3 +21,5 @@ the enemy king could also block castling. So maybe later implement that. Also pa
 
 Checking for stalemate should be easy, just check each piece's legal moves each turn end.
 For checkmate, Check legal moves of each piece and see if it covers all of the legal moves of the king, then see if there could be any blocks or captures that could prevent mate.
+
+-Probably need to remove DisplayPiece function because it's a bit useless and may be expensive for the AI (Unless i just don't use DisplayPiece in AI since it doesn't need to render until it moves...)

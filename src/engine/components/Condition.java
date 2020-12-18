@@ -270,13 +270,4 @@ public class Condition {
 		
 		return threats;
 	}
-	
-	public static boolean PinnedPiece(Square kingSquare, Square pieceSquare) {
-		/**
-		 * @description - This function will check to see if a piece is being pinned on a friendly king.
-		 * @param kingSquare - The square the FRIENDLY king currently resides on.
-		 * @param pieceSquare - The square the selected piece resides on.
-		 * */
-		return false;
-	}
 }
