@@ -63,6 +63,21 @@ public class Condition {
 		return 1; // checkmate
 	}
 	
+	public void replacePiece(Piece oldPiece, Piece newPiece, int team) {
+		/**
+		 * @desc - extremely important function that will handle configuring the piece array to work with pawn promotions.
+		 * @param oldPiece - piece that needs to be replaced in the array
+		 * @param newPiece - piece that will replace the selected piece
+		 * @param team - the team of the friendy piece
+		 * */
+		Piece[] fp = team == 0 ? wp : bp; // acronym for "friendly pieces"
+		for(int i = 0; i < fp.length; i++) {
+			if(oldPiece == fp[i]) { // Check to see if the memory reference matches the one that needs to be replaced.
+				fp[i] = newPiece;
+			}
+		}
+	}
+	
 	private boolean HasMove(Piece p, int team) {
 		Square start = p.getSquare();
 		ArrayList<Square> legalMoves = p.getLegalMoves(board);

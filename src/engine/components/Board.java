@@ -151,8 +151,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				// Pawn promotion check
 				int yCoord = end.getPosition()[1];
 				if(p instanceof Pawn && (yCoord == 0 || yCoord == 7)) {
-					p = checkPawnPromotion(end); // reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
-					end.setPiece(p); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
+					Piece newPiece = checkPawnPromotion(end);
+					end.setPiece(newPiece); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
+					condition.replacePiece(p, newPiece, p.getTeam());// reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
 				}
 				turnNumber++;
 				turn = turn == 1 ? 0 : 1; // This flips the turn to the other player, important that it's last.

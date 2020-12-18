@@ -80,7 +80,6 @@ public abstract class Piece {
 		g.drawImage(pic, x, y, size, size, null);
 	}
 	
-	// Probably will need a "ConsiderKing" function that checks to see if the piece is pinned, or if castling is not allowed.
 	public abstract ArrayList<Square> getLegalMoves(Board board); // will implement later in other classes as it's abstract
 	
 }
