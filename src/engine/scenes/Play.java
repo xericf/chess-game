@@ -16,5 +16,4 @@ public class Play extends JPanel{
 		setLayout(new BorderLayout());
 		add(board, BorderLayout.CENTER);	
 	}
-	
 }

@@ -30,7 +30,7 @@ public class Knight extends Piece {
 				{-1, 2},
 				{-1, -2},
 		};
-
+		
 		for(int i = 0; i < vectors.length; i++) {
 			int vx = vectors[i][0];
 			int vy = vectors[i][1];

@@ -79,8 +79,8 @@ public class King extends Piece {
 				}
 			}
 		}
-		
-		if(!hasMoved && !board.isChecked() && isSquareSafe(board, squares[x][y], team)) { // If the king has not moved, and is also not currently in check.
+		//The following considers castling rights
+		if(!hasMoved && !board.isChecked() && isSquareSafe(board, squares[x][y], team)) { 	// If the king has not moved, and is also not currently in check.
 			// king-side castling
 			boolean clear = true; 
 			for(int i = x+1; i < 7; i++) {
@@ -116,8 +116,6 @@ public class King extends Piece {
 				moves.add(squares[2][y]); // This is just to change where you must drag and drop the king in order to castle.
 			}
 		}
-		
 		return moves;
 	}
-	
 }

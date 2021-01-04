@@ -71,11 +71,8 @@ public class Square extends JComponent {
 		super.paintComponent(g);
 		g.setColor(this.color);
 		g.fillRect(x*squareSize, y*squareSize, squareSize, squareSize);
-		
 		if(displayPiece && this.piece != null) { // if there's a piece in there, then draw it.
 			piece.draw(g, x*squareSize, y*squareSize);
 		}
-		
 	}
-	
 }

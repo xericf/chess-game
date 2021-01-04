@@ -25,19 +25,16 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Color squareColor1;
 	private Color squareColor2;
 	private int squareSize = 80;
-
 	private int pieceX = 0;
 	private int pieceY = 0;
 	private Square pieceSquare = null;
-
+	
 	private Cursor defCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 	private Cursor grabCursor = new Cursor(Cursor.HAND_CURSOR);
-	
 	private Condition condition;
 	private int turn;
 	private boolean isChecked;
 	private int turnNumber;
-	
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
@@ -65,8 +62,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			wp[i] = squares[i%8][i/8 + 6].getPiece();
 		}
 		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp, this);
-		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the
-								// JPanel of Board
+		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the JPanel of Board
 		addMouseMotionListener(this);
 	}
 
@@ -287,23 +283,19 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseClicked(MouseEvent m) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public Square[][] getSquaresArray() {
 		return squares;
 	}
-
 }

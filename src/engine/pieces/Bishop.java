@@ -10,7 +10,6 @@ public class Bishop extends Piece {
 
 	public Bishop(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
