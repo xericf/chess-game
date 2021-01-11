@@ -118,4 +118,10 @@ public class King extends Piece {
 		}
 		return moves;
 	}
+
+	@Override
+	public float getValue() {
+		// TODO Auto-generated method stub
+		return 900.0f;
+	}
 }

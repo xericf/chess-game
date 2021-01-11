@@ -7,7 +7,19 @@ import engine.components.Board;
 import engine.components.Square;
 
 public class Bishop extends Piece {
-
+	
+	private float[] bishopOffsets = {
+			// These are offsets for the valuations of the knight for certain key squares. Knights are better in the central 16 squares, hence they have an offset that makes it desirable
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	};
+	
 	public Bishop(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
 	}
@@ -48,6 +60,12 @@ public class Bishop extends Piece {
 		}
 		
 		return moves;
+	}
+
+	@Override
+	public float getValue() {
+		// TODO Auto-generated method stub
+		return 30.0f;
 	}
 
 }

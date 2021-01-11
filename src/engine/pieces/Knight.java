@@ -7,6 +7,19 @@ import engine.components.Square;
 
 public class Knight extends Piece {
 
+	private float[] knightOffsets = {
+			// These are offsets for the valuations of the knight for certain key squares. Knights are better in the central 16 squares, hence they have an offset that makes it desirable
+			// Knights are bad on the rim, therefore we must discourage it by setting the offset lower.
+			-3.0f, -2.0f, -1.0f, -1.0f, -1.0f, -1.0f, -2.0f, -3.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f,
+			-1.0f, 0.0f, 1.0f, 1.5f, 1.5f, 1.0f, 0.0f, -1.0f,
+			-1.0f, 0.0f, 1.5f, 2.0f, 2.0f, 1.5f, 0.0f, -1.0f,
+			-1.0f, 0.0f, 1.5f, 2.0f, 2.0f, 1.5f, 0.0f, -1.0f,
+			-1.0f, 0.0f, 1.0f, 1.5f, 1.5f, 1.0f, 0.0f, -1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f,
+			-3.0f, -2.0f, -1.0f, -1.0f, -1.0f, -1.0f, -2.0f, -3.0f
+	};
+	
 	public Knight(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
 		// TODO Auto-generated constructor stub
@@ -45,6 +58,12 @@ public class Knight extends Piece {
 		}
 		
 		return moves;
+	}
+
+	@Override
+	public float getValue() {
+		
+		return 30.0f;
 	}
 
 }

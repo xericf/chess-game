@@ -16,6 +16,10 @@ https://www.youtube.com/watch?v=gyLCFfrLGIM&ab_channel=LogicCrazyChess
 https://www.freecodecamp.org/news/simple-chess-ai-step-by-step-1d55a9266977/
 
 
+Pros to talk about:
+- The minimax function
+- The abstract function for legal moves and getValue, and how it makes things a lot easier and less costly for memory and performance.
+
 TODO:
 - Reduce the amount of repaints there are using logic.
 Remember, no legal moves on king and it is in chevk means checkmate, if it is not in check then it is stalemate.

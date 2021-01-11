@@ -65,4 +65,10 @@ public class Rook extends Piece {
 		return moves;
 	}
 
+	@Override
+	public float getValue() {
+		// TODO Auto-generated method stub
+		return 50.0f;
+	}
+
 }

@@ -2,6 +2,8 @@ package engine.components;
 
 import java.security.SecureRandom;
 
+import engine.pieces.Piece;
+
 public class Zobrist {
 	
 	public static long[][][] zNumbers = new long[2][6][64]; // This symbolizes a 3d array with a unique id for each square that has a certain type of piece and piece color on it.
@@ -35,10 +37,17 @@ public class Zobrist {
 		zBlackMove = rng64();
 	}
 	
-	public static void genZHash() {
+	public static long genZHash(Piece[] whitePieces, Piece[] blackPieces) {
 		/**
-		 * @desc generates a Zobrist hash for a unique chess position
+		 * @desc generates a Zobrist hash for a unique chess position.
 		 * */
+		long zKey = 0;
 		
+		for(int i = 0; i < whitePieces.length; i++) {
+			int[] xy = whitePieces[i].getSquare().getPosition();
+			
+		}
+		
+		return zKey;
 	}
 }

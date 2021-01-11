@@ -32,6 +32,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Cursor defCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 	private Cursor grabCursor = new Cursor(Cursor.HAND_CURSOR);
 	private Condition condition;
+	public AI ai;
 	private int turn;
 	private boolean isChecked;
 	private int turnNumber;
@@ -62,6 +63,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			wp[i] = squares[i%8][i/8 + 6].getPiece();
 		}
 		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp, this);
+		ai = new AI(wp, bp, this, condition);
 		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the JPanel of Board
 		addMouseMotionListener(this);
 	}
@@ -139,11 +141,14 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					end.setPiece(savedPiece);
 					start.setPiece(p);
 					p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
-					if(savedPiece != null) savedPiece.setSquare(end); // this if statement is important because savedPiece is not guaranteed to be a Piece
+					if(savedPiece != null) {
+						savedPiece.setSquare(end);
+					}
 					return false;
 				}
 				// Insurmountably important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
 				if(savedPiece != null) savedPiece.setAlive(false);  
+				
 				// Pawn promotion check
 				int yCoord = end.getPosition()[1];
 				if(p instanceof Pawn && (yCoord == 0 || yCoord == 7)) {
@@ -255,7 +260,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		} else if (pieceSquare != null) { // if they are not the same object and a piece is selected
 			boolean result = AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
-				// Could check for checkmate and stalemate in this block.
 				switch(condition.checkWin(turn)) {
 				case 0:
 					break;

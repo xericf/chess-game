@@ -136,4 +136,10 @@ public class Pawn extends Piece {
 		return moves;
 	}
 
+	@Override
+	public float getValue() {
+		// TODO Auto-generated method stub
+		return 10.0f;
+	}
+
 }

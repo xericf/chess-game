@@ -45,7 +45,6 @@ public class Condition {
 				|| Condition.getKingThreats(arr, ks, team).size() != 0) {
 			return true;
 		}
-		
 		return false;
 	}
 	
@@ -56,6 +55,7 @@ public class Condition {
 		 * */
 		
 		Piece[] fp = team == 0 ? wp : bp; // acronym for "friendly pieces"
+
 		for(int i = 0; i < fp.length; i++) {
 			if(fp[i].isAlive() && HasMove(fp[i], team)) return 0; // has move therefore game is not done
 		}
@@ -89,7 +89,7 @@ public class Condition {
 			if(inCheck(team)) { // Essentially this will reverse the move if the king is put in check or already in check from the move.
 				end.setPiece(savedPiece);
 				start.setPiece(p);
-				p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
+				p.setSquare(start); 
 				if(savedPiece != null) savedPiece.setSquare(end); 
 			} else {
 				end.setPiece(savedPiece);

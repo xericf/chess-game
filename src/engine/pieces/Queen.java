@@ -75,4 +75,10 @@ public class Queen extends Piece {
 		return moves;
 	}
 
+	@Override
+	public float getValue() {
+		// TODO Auto-generated method stub
+		return 90.0f;
+	}
+
 }

@@ -81,5 +81,5 @@ public abstract class Piece {
 	}
 	
 	public abstract ArrayList<Square> getLegalMoves(Board board); // will implement later in other classes as it's abstract
-	
+	public abstract float getValue();
 }
