@@ -65,17 +65,13 @@ public class King extends Piece {
 		int y = position[1];
 		int team = this.getTeam();
 		
-		for(int i = -1; i <= 1; i++) {
-			for(int j = -1; j <= 1; j++) {
-				try {
-					Square s = squares[x+i][y+j];
-					if(s != this.square && (s.getPiece() == null || s.getPiece().getTeam() != team)) { // need to check if it's not this.square to get rid of its current square
-						if(isSquareSafe(board, s, team)) {
-							moves.add(s);
-						}
+		for(int i = y - 1 < 0 ? 0 : y-1; i <= (y+1 > 7 ? 7 : y+1); i++) {
+			for(int j = x - 1 < 0 ? 0 : x-1; j <= (x+1 > 7 ? 7 : x+1); j++) {
+				Square s = squares[j][i];
+				if(s != this.square && (s.getPiece() == null || s.getPiece().getTeam() != team)) { // need to check if it's not this.square to get rid of its current square
+					if(isSquareSafe(board, s, team)) {
+						moves.add(s);
 					}
-				} catch (ArrayIndexOutOfBoundsException e) {
-					continue; // Simply continue if it is out of bounds onto the next possible move
 				}
 			}
 		}
