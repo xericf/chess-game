@@ -33,23 +33,21 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private Cursor grabCursor = new Cursor(Cursor.HAND_CURSOR);
 	private Condition condition;
 	public AI ai;
-	private int turn;
-	private boolean isChecked;
-	private int turnNumber;
+	boolean isChecked;
+	private MoveHandler mh;
 	
 	public Board() {
 		squares = new Square[8][8]; // create an 8x8 board
 		boolean colorSwitch = false;
 		squareColor1 = new Color(204, 102, 0);
 		squareColor2 = new Color(255, 193, 128);
-		turn = 0;
 		isChecked = false;
 		for (int x = 0; x < 8; x++) { // initialize all of the squares
 			for (int y = 0; y < 8; y++) {
 				if (colorSwitch) {
-					squares[x][y] = new Square(x, y, squareSize, squareColor1, this);
+					squares[x][y] = new Square(x, y, squareSize, squareColor1, mh);
 				} else {
-					squares[x][y] = new Square(x, y, squareSize, squareColor2, this);
+					squares[x][y] = new Square(x, y, squareSize, squareColor2, mh);
 				}
 				colorSwitch = !colorSwitch;
 			}
@@ -62,18 +60,19 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			bp[i] = squares[i%8][i/8].getPiece(); // this is simply taking advantage of integer flooring to get the row and column of each piece
 			wp[i] = squares[i%8][i/8 + 6].getPiece();
 		}
-		condition = new Condition((King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp, this);
-		ai = new AI(wp, bp, this, condition);
+		
+		mh = new MoveHandler(squares, 0, 0, isChecked, (King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp);
+		ai = new AI(wp, bp, mh);
 		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the JPanel of Board
 		addMouseMotionListener(this);
 	}
 
 	public void initPieces() {
 		/**
-		 * This function will put all of the pieces into their respective squares for
+		 * @desc - This function will put all of the pieces into their respective squares for
 		 * both white and black.
+		 * white pieces initialize, 1= black, 0 = white;
 		 */
-		// white pieces initialize, 1= black, 0 = white;
 		for (int i = 0; i < 8; i++) {
 			squares[i][6].setPiece(new Pawn(squares[i][6], 0, "resources/wpawn.png"));
 		}
@@ -98,13 +97,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		squares[5][0].setPiece(new Bishop(squares[5][0], 1, "resources/bbishop.png"));
 		squares[3][0].setPiece(new Queen(squares[3][0], 1, "resources/bqueen.png"));
 		squares[4][0].setPiece(new King(squares[4][0], 1, "resources/bking.png"));
-
-		repaint(); // I'm not really sure if this is necessary since it drew without this method,
-					// but this is just to be sure it repaints
-	}
-	
-	public int getTurnNumber() {
-		return this.turnNumber;
 	}
 	
 	public Square getSquareFromCoord(int x, int y) {
@@ -119,11 +111,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	
 	public Square getSquare(int col, int row) {
 		Square s = null;
-		try {
-			s = squares[col][row];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Square out of bounds");
-		}
+		s = squares[col][row];
 		return s;
 	}
 	
@@ -131,12 +119,12 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		Piece p = start.getPiece();
 		Piece savedPiece = end.getPiece(); // this piece will be if the move is not allowed, and it will replace the
 		// end square with it again if the king is still in check.
-		ArrayList<Square> legalMoves = p.getLegalMoves(this);
+		ArrayList<Square> legalMoves = p.getLegalMoves(mh);
 		if(legalMoves == null) return false;
 		for(int i = 0; i < legalMoves.size(); i++) {
 			if(legalMoves.get(i) == end) {
-				p.move(end);
-				if(condition.inCheck(turn)) { 
+				p.move(end, mh);
+				if(mh.inCheck()) { 
 					// Essentially this will reverse the move if the king is put in check or already in check from the move.
 					end.setPiece(savedPiece);
 					start.setPiece(p);
@@ -154,10 +142,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				if(p instanceof Pawn && (yCoord == 0 || yCoord == 7)) {
 					Piece newPiece = checkPawnPromotion(end);
 					end.setPiece(newPiece); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
-					condition.replacePiece(p, newPiece, p.getTeam());// reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
+					mh.replacePiece(p, newPiece, p.getTeam());// reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
 				}
-				turnNumber++;
-				turn = turn == 1 ? 0 : 1; // This flips the turn to the other player, important that it's last.
+				mh.incrementTurn();
 				return true;
 			}
 		}
@@ -172,6 +159,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		 * @returns Knight - Knight Promotion
 		 * @returns Queen - Queen Promotion
 		 * */
+		int turn = mh.getTurn();
 		String prefix = turn == 0 ? "w" : "b"; // white or black that will be added to image string
 		String[] buttons = {"Rook", "Bishop", "Knight", "Queen"};
 		int option =  JOptionPane.showOptionDialog(this,
@@ -200,15 +188,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		return data;
 	}
-	
-	public int getTurn() {
-		return this.turn;
-	}
-	
-	public boolean isChecked() {
-		return this.isChecked;
-	}
-	
+
 	public Condition getConditionObj() {
 		return this.condition;
 	}
@@ -241,7 +221,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		int x = m.getPoint().x;
 		int y = m.getPoint().y;
 		Square sq = getSquareFromCoord(x, y);
-		if (sq.getPiece() != null && sq.getPiece().getTeam() == turn) {
+		if (sq.getPiece() != null && sq.getPiece().getTeam() == mh.getTurn()) {
 			this.pieceSquare = sq;
 			pieceSquare.setDisplayPiece(false);
 			setCursor(grabCursor);
@@ -260,7 +240,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		} else if (pieceSquare != null) { // if they are not the same object and a piece is selected
 			boolean result = AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
-				switch(condition.checkWin(turn)) {
+				switch(mh.checkWin()) {
 				case 0:
 					break;
 				case 1:

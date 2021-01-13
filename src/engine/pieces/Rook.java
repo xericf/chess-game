@@ -4,19 +4,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import engine.components.Board;
+import engine.components.MoveHandler;
 import engine.components.Square;
 
 public class Rook extends Piece {
 	
 	public boolean hasMoved;
+	private Square startSquare;
+	private int color;
 	
 	public Rook(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
 		hasMoved = false;
 	}
+	public Rook(Square startSquare, int color, boolean hasMoved) {
+		super(startSquare, color);
+		this.hasMoved = hasMoved;
+		this.startSquare = startSquare;
+		this.color = color;
+	}
 	
 	@Override
-	public boolean move(Square end) {
+	public boolean move(Square end, MoveHandler mh) {
 		/**
 		 * We override this method to incorporate the special rule of chess where the king can't castle if the rook has moved already
 		 * */
@@ -30,7 +39,7 @@ public class Rook extends Piece {
 	}
 	
 	@Override
-	public ArrayList<Square> getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(MoveHandler board) {
 		ArrayList<Square> moves = new ArrayList<Square>();
 		Square[][] squares = board.getSquaresArray();
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value
@@ -69,6 +78,11 @@ public class Rook extends Piece {
 	public float getValue() {
 		// TODO Auto-generated method stub
 		return 50.0f;
+	}
+	@Override
+	public Rook clone() {
+		// TODO Auto-generated method stub
+		return new Rook(startSquare, color, hasMoved);
 	}
 
 }

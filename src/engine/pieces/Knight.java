@@ -3,10 +3,13 @@ package engine.pieces;
 import java.util.ArrayList;
 
 import engine.components.Board;
+import engine.components.MoveHandler;
 import engine.components.Square;
 
 public class Knight extends Piece {
 
+	private int color;
+	private Square startSquare;
 	private float[] knightOffsets = {
 			// These are offsets for the valuations of the knight for certain key squares. Knights are better in the central 16 squares, hence they have an offset that makes it desirable
 			// Knights are bad on the rim, therefore we must discourage it by setting the offset lower.
@@ -22,11 +25,16 @@ public class Knight extends Piece {
 	
 	public Knight(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public Knight(Square startSquare, int color) {
+		super(startSquare, color);
+		this.startSquare = startSquare;
+		this.color = color;
 	}
 
 	@Override
-	public ArrayList<Square> getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(MoveHandler board) {
 		ArrayList<Square> moves = new ArrayList<Square>();
 		Square[][] squares = board.getSquaresArray();
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value
@@ -64,6 +72,12 @@ public class Knight extends Piece {
 	public float getValue() {
 		
 		return 30.0f;
+	}
+
+	@Override
+	public Knight clone() {
+		// TODO Auto-generated method stub
+		return new Knight(startSquare, color);
 	}
 
 }

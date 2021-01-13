@@ -5,18 +5,28 @@ import java.util.ArrayList;
 import engine.components.Board;
 import engine.components.Square;
 import engine.components.Condition;
+import engine.components.MoveHandler;
 
 public class King extends Piece {
 	
 	public boolean hasMoved;
+	private Square startSquare;
+	private int color;
 	
 	public King(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
+		this.startSquare = startSquare;
+		this.color = color;
 		hasMoved = false;
 	}
 	
+	public King(Square startSquare, int color, boolean hasMoved) {
+		super(startSquare, color);
+		this.hasMoved = hasMoved;
+	}
+	
 	@Override
-	public boolean move(Square end) {
+	public boolean move(Square end, MoveHandler mh) {
 		/**
 		 * We override this method to incorporate the special rule of chess where the king can't castle if the king has moved already
 		 * */
@@ -26,24 +36,23 @@ public class King extends Piece {
 		square.setPiece(null);
 		square = end; // reassign the currentSquare to the finishing square.
 		int[] p = end.getPosition();
-		Board b = square.getBoard();
 		if(!hasMoved) {
 			// If end square points to one of these x positions, that means the rook is still on the default square and there's no checks to prevent castling because of the getLegalMoves function
 			if(p[0] == 2) {
-				Square rookSquare = b.getSquare(0, p[1]);
-				Square destSquare = b.getSquare(3, p[1]);
-				rookSquare.getPiece().move(destSquare);
+				Square rookSquare = mh.getSquare(0, p[1]);
+				Square destSquare = mh.getSquare(3, p[1]);
+				rookSquare.getPiece().move(destSquare, mh);
 			} else if(p[0] == 6) {
-				Square rookSquare = b.getSquare(7, p[1]);
-				Square destSquare = b.getSquare(5, p[1]);
-				rookSquare.getPiece().move(destSquare);
+				Square rookSquare = mh.getSquare(7, p[1]);
+				Square destSquare = mh.getSquare(5, p[1]);
+				rookSquare.getPiece().move(destSquare, mh);
 			}
 		}
 		hasMoved = true;
 		return true;
 	}
 	
-	public boolean isSquareSafe(Board board, Square s, int team) {;
+	public boolean isSquareSafe(MoveHandler board, Square s, int team) {;
 		Square[][] arr = board.getSquaresArray();
 		if(Condition.getKnightThreats(arr, s, team).size() != 0
 				|| Condition.getDiagonalThreats(arr, s, team).size() != 0
@@ -56,7 +65,7 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public ArrayList<Square> getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(MoveHandler board) {
 		
 		ArrayList<Square> moves = new ArrayList<Square>();
 		Square[][] squares = board.getSquaresArray();
@@ -119,5 +128,11 @@ public class King extends Piece {
 	public float getValue() {
 		// TODO Auto-generated method stub
 		return 900.0f;
+	}
+
+	@Override
+	public King clone() {
+		// TODO Auto-generated method stub
+		return new King(square, color, hasMoved);
 	}
 }

@@ -5,25 +5,32 @@ import java.util.Arrays;
 
 import engine.components.Board;
 import engine.components.Condition;
+import engine.components.MoveHandler;
 import engine.components.Square;
 
 public class Pawn extends Piece {
 	public int turnMoved = -1;
+	private int team;
+	private Square startSquare;
 	public Pawn(Square startSquare, int team, String imgLocation) {
 		super(startSquare, team, imgLocation); // will just call the Piece constructor..
 	}
-	
+	public Pawn(Square startSquare, int team, int turnMoved) {
+		super(startSquare, team);
+		this.turnMoved = turnMoved;
+		this.startSquare = startSquare;
+		this.team = team;
+	}
 	@Override
-	public boolean move(Square end) {
+	public boolean move(Square end, MoveHandler mh) {
 		if(end == null) return false;
-		Board b = end.getBoard();
 		int[] dp = end.getPosition(); // destination position
 		int[] cp = this.square.getPosition(); // current position
 		if((dp[0] == cp[0]+1 || dp[0] == cp[0]-1) && dp[1] == cp[1]) { 
 			// POTENTIAL ERROR IN @Condition.HasMove(), it will try to see if it has the move of enpassanting a pawn checking the king, but it will still render it as an inviable move due to the pawn not being removed from enpassant
 			square.setDisplayPiece(true); // set it to true again to allow for the next piece to be shown
 			int offsetY = this.getTeam() == 0 ? -1 : 1; // Move up the board if white, down if black.
-			Square newEnd = b.getSquare(dp[0], cp[1]+offsetY);
+			Square newEnd = mh.getSquare(dp[0], cp[1]+offsetY);
 			newEnd.setPiece(square.getPiece()); // Will just reference to this object... could also replace with the this keyword.
 			square.setPiece(null);
 			end.setPiece(null);
@@ -34,22 +41,22 @@ public class Pawn extends Piece {
 			square.setPiece(null);
 			square = end; // reassign the currentSquare to the finishing square.
 		}
-		if(turnMoved == -1) turnMoved = end.getBoard().getTurnNumber();
+		if(turnMoved == -1) turnMoved = mh.getTurnNumber();
 		return true;
 	}
 	
 	
 	@Override
-	public ArrayList<Square> getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(MoveHandler mh) {
 		/**
 		 * @param board - The board that the piece is on.
 		 * This will get all the legal moves of the pawn piece.
 		 * */
 		ArrayList<Square> moves = new ArrayList<Square>();
-		Square[][] squares = board.getSquaresArray();
+		Square[][] squares = mh.getSquaresArray();
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value
 		int team = this.getTeam();
-		int turnNumber = board.getTurnNumber();
+		int turnNumber = mh.getTurnNumber();
 		
 		if(team == 0) { // 0 is white
 			int offset = position[1] == 6 ? 2 : 1;  // if white's pawn are on their starting square, they can potentially move twice
@@ -140,6 +147,11 @@ public class Pawn extends Piece {
 	public float getValue() {
 		// TODO Auto-generated method stub
 		return 10.0f;
+	}
+	@Override
+	public Pawn clone() {
+		// TODO Auto-generated method stub
+		return new Pawn(startSquare, team, turnMoved);
 	}
 
 }

@@ -4,20 +4,18 @@ import engine.pieces.Piece;
 
 public class AI {
 
-	private Board b;
+	private MoveHandler mh;
 	private Piece[] wp;
 	private Piece[] bp;
-	private Condition c;
 
-	public AI(Piece[] wp, Piece[] bp, Board b, Condition c) {
+	public AI(Piece[] wp, Piece[] bp, MoveHandler mh) {
 		/**
 		 * @Desc this class is for the chess AI. It uses the minimax algorithm with alpha-beta pruning to find the best moves.
 		 * @param wp - White pieces
 		 * */
-		this.b = b;
+		this.mh = mh;
 		this.wp = wp;
 		this.bp = bp;
-		this.c = c;
 	}
 	
 	public float evalPosition() {

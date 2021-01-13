@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import engine.components.Board;
+import engine.components.MoveHandler;
 import engine.components.Square;
 
 public abstract class Piece {
@@ -35,7 +36,12 @@ public abstract class Piece {
 		}
 	}
 	
-	public boolean move(Square end) {
+	public Piece(Square startSquare, int color) {
+		square = startSquare;
+		this.team = color;
+	}
+	
+	public boolean move(Square end, MoveHandler mh) {
 		/**
 		 * This function will simply move a piece to a selected square.
 		 * @param end - Then square the piece will end up on.
@@ -80,6 +86,8 @@ public abstract class Piece {
 		g.drawImage(pic, x, y, size, size, null);
 	}
 	
-	public abstract ArrayList<Square> getLegalMoves(Board board); // will implement later in other classes as it's abstract
+	public abstract ArrayList<Square> getLegalMoves(MoveHandler mh); // will implement later in other classes as it's abstract
+	public abstract Piece clone();
 	public abstract float getValue();
+	
 }

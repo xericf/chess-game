@@ -3,17 +3,25 @@ package engine.pieces;
 import java.util.ArrayList;
 
 import engine.components.Board;
+import engine.components.MoveHandler;
 import engine.components.Square;
 
 public class Queen extends Piece {
 
+	private Square startSquare;
+	private int color;
 	public Queen(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public Queen(Square startSquare, int color) {
+		super(startSquare, color);
+		this.startSquare = startSquare;
+		this.color = color;
 	}
 
 	@Override
-	public ArrayList<Square> getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(MoveHandler board) {
 		ArrayList<Square> moves = new ArrayList<Square>();
 		Square[][] squares = board.getSquaresArray();
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value
@@ -77,8 +85,12 @@ public class Queen extends Piece {
 
 	@Override
 	public float getValue() {
-		// TODO Auto-generated method stub
 		return 90.0f;
+	}
+
+	@Override
+	public Queen clone() {
+		return new Queen(startSquare, color);
 	}
 
 }

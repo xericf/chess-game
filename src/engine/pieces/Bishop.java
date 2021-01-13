@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import engine.components.Board;
+import engine.components.MoveHandler;
 import engine.components.Square;
 
 public class Bishop extends Piece {
 	
+	private int color;
+	private Square startSquare;
 	private float[] bishopOffsets = {
 			// These are offsets for the valuations of the knight for certain key squares. Knights are better in the central 16 squares, hence they have an offset that makes it desirable
 			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
@@ -23,11 +26,17 @@ public class Bishop extends Piece {
 	public Bishop(Square startSquare, int color, String imgLocation) {
 		super(startSquare, color, imgLocation);
 	}
+	
+	public Bishop(Square startSquare, int color) {
+		super(startSquare, color);
+		this.startSquare = startSquare;
+		this.color = color;
+	}
 
 	@Override
-	public ArrayList<Square> getLegalMoves(Board board) {
+	public ArrayList<Square> getLegalMoves(MoveHandler mh) {
 		ArrayList<Square> moves = new ArrayList<Square>();
-		Square[][] squares = board.getSquaresArray();
+		Square[][] squares = mh.getSquaresArray();
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value
 		int x = position[0];
 		int y = position[1];
@@ -66,6 +75,12 @@ public class Bishop extends Piece {
 	public float getValue() {
 		// TODO Auto-generated method stub
 		return 30.0f;
+	}
+
+	@Override
+	public Bishop clone() {
+		// TODO Auto-generated method stub
+		return new Bishop(startSquare, color);
 	}
 
 }

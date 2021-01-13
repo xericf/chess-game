@@ -13,99 +13,10 @@ import engine.pieces.Rook;
 
 public class Condition {
 	
-	public King wk;
-	public King bk;
-	public Piece[] bp;
-	public Piece[] wp;
-	public Board board;
-	
-	public Condition(King wk, King bk, Piece[] blackPieces, Piece[] whitePieces, Board b) {
-		this.wk = wk;
-		this.bk = bk;
-		this.bp = blackPieces;
-		this.wp = whitePieces;
-		this.board = b;
-	}
-	
-	public Piece[] getPieceArray(int team) {
-		Piece[] arr = team == 0 ? wp : bp;
-		return arr;
-	}
-	
-	
-	public boolean inCheck(int team) {
-		// I guess this function will only be used for the main board and only used when the opponent checks the king?
-		King k = team == 0 ? wk : bk;
-		Square ks = k.getSquare();
-		Square[][] arr = board.getSquaresArray();
-		if(Condition.getKnightThreats(arr, ks, team).size() != 0
-				|| Condition.getDiagonalThreats(arr, ks, team).size() != 0
-				|| Condition.getStraightThreats(arr, ks, team).size() != 0
-				|| Condition.getPawnThreats(arr, ks ,team).size() != 0
-				|| Condition.getKingThreats(arr, ks, team).size() != 0) {
-			return true;
-		}
-		return false;
-	}
-	
-	public int checkWin(int team) {
-		/**
-		 * @desc - checks whether or not the selected team is in checkmate OR stalemate based on their piece's legal moves.
-		 * @returns: 0 = in progress game, 1 = checkmated king, 2 = stalemated
-		 * */
-		
-		Piece[] fp = team == 0 ? wp : bp; // acronym for "friendly pieces"
-
-		for(int i = 0; i < fp.length; i++) {
-			if(fp[i].isAlive() && HasMove(fp[i], team)) return 0; // has move therefore game is not done
-		}
-		if(!inCheck(team)) return 2; // if it's not in check, it's stalemate
-		return 1; // checkmate
-	}
-	
-	public void replacePiece(Piece oldPiece, Piece newPiece, int team) {
-		/**
-		 * @desc - extremely important function that will handle configuring the piece array to work with pawn promotions.
-		 * @param oldPiece - piece that needs to be replaced in the array
-		 * @param newPiece - piece that will replace the selected piece
-		 * @param team - the team of the friendy piece
-		 * */
-		Piece[] fp = team == 0 ? wp : bp; // acronym for "friendly pieces"
-		for(int i = 0; i < fp.length; i++) {
-			if(oldPiece == fp[i]) { // Check to see if the memory reference matches the one that needs to be replaced.
-				fp[i] = newPiece;
-			}
-		}
-	}
-	
-	private boolean HasMove(Piece p, int team) {
-		Square start = p.getSquare();
-		ArrayList<Square> legalMoves = p.getLegalMoves(board);
-		if(legalMoves == null) return false;
-		for(int i = 0; i < legalMoves.size(); i++) {
-			Square end = legalMoves.get(i);
-			Piece savedPiece = end.getPiece(); 
-			p.move(end);
-			if(inCheck(team)) { // Essentially this will reverse the move if the king is put in check or already in check from the move.
-				end.setPiece(savedPiece);
-				start.setPiece(p);
-				p.setSquare(start); 
-				if(savedPiece != null) savedPiece.setSquare(end); 
-			} else {
-				end.setPiece(savedPiece);
-				start.setPiece(p);
-				p.setSquare(start); 
-				if(savedPiece != null) savedPiece.setSquare(end); 
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public static ArrayList<Square> getDiagonalThreats(Square[][] squares, Square currentSquare, int team){
 		/**
 		 * @description - Will return an ArrayList of threats that could come from the diagonal. Used to check for checkmate and castling rights. 
-		 * @param b- will simply be the board
+		 * @param b- will simply be the mh
 		 * @param currentSquare - the current square that could be threatened
 		 * @param team - The team that is friendly, so threats must come from different team values.
 		 * */
@@ -202,7 +113,7 @@ public class Condition {
 	public static ArrayList<Square> getStraightThreats(Square[][] squares, Square currentSquare, int team){
 		/**
 		 * @description - Will return an ArrayList of threats that could come from straight lines. Used to check for checkmate and castling rights. 
-		 * @param b- will simply be the board
+		 * @param b- will simply be the MoveHandler
 		 * @param currentSquare - the current square that could be threatened
 		 * @param team - The team that is friendly, so threats must come from different team values.
 		 * */
