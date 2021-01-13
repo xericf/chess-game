@@ -22,8 +22,6 @@ import engine.pieces.Rook;
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 
 	private Square[][] squares;
-	private Color squareColor1;
-	private Color squareColor2;
 	private int squareSize = 80;
 	private int pieceX = 0;
 	private int pieceY = 0;
@@ -37,22 +35,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private MoveHandler mh;
 	
 	public Board() {
-		squares = new Square[8][8]; // create an 8x8 board
-		boolean colorSwitch = false;
-		squareColor1 = new Color(204, 102, 0);
-		squareColor2 = new Color(255, 193, 128);
 		isChecked = false;
-		for (int x = 0; x < 8; x++) { // initialize all of the squares
-			for (int y = 0; y < 8; y++) {
-				if (colorSwitch) {
-					squares[x][y] = new Square(x, y, squareSize, squareColor1, mh);
-				} else {
-					squares[x][y] = new Square(x, y, squareSize, squareColor2, mh);
-				}
-				colorSwitch = !colorSwitch;
-			}
-			colorSwitch = !colorSwitch; // this is to offset the column color by 1
-		}
+		squares = initSquares(squareSize, mh);
 		initPieces();
 		Piece[] bp = new Piece[16];
 		Piece[] wp = new Piece[16];
@@ -61,10 +45,29 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			wp[i] = squares[i%8][i/8 + 6].getPiece();
 		}
 		
-		mh = new MoveHandler(squares, 0, 0, isChecked, (King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp);
-		ai = new AI(wp, bp, mh);
+		mh = new MoveHandler(this, squares, 0, 0, isChecked, (King) squares[4][7].getPiece(), (King) squares[4][0].getPiece(), bp, wp);
+		ai = new AI(mh);
 		addMouseListener(this); // attach the implemented mouse listener methods from the interface to the JPanel of Board
 		addMouseMotionListener(this);
+	}
+	
+	public static Square[][] initSquares(int squareSize, MoveHandler moveHandler){
+		Square[][] sqs = new Square[8][8];
+		boolean colorSwitch = false;
+		Color squareColor1 = new Color(204, 102, 0);
+		Color squareColor2  = new Color(255, 193, 128);
+		for (int x = 0; x < 8; x++) { // initialize all of the squares
+			for (int y = 0; y < 8; y++) {
+				if (colorSwitch) {
+					sqs[x][y] = new Square(x, y, squareSize, squareColor1, moveHandler);
+				} else {
+					sqs[x][y] = new Square(x, y, squareSize, squareColor2, moveHandler);
+				}
+				colorSwitch = !colorSwitch;
+			}
+			colorSwitch = !colorSwitch; // this is to offset the column color by 1
+		}
+		return sqs;
 	}
 
 	public void initPieces() {
@@ -115,42 +118,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		return s;
 	}
 	
-	public boolean AttemptMove(Square start, Square end) {
-		Piece p = start.getPiece();
-		Piece savedPiece = end.getPiece(); // this piece will be if the move is not allowed, and it will replace the
-		// end square with it again if the king is still in check.
-		ArrayList<Square> legalMoves = p.getLegalMoves(mh);
-		if(legalMoves == null) return false;
-		for(int i = 0; i < legalMoves.size(); i++) {
-			if(legalMoves.get(i) == end) {
-				p.move(end, mh);
-				if(mh.inCheck()) { 
-					// Essentially this will reverse the move if the king is put in check or already in check from the move.
-					end.setPiece(savedPiece);
-					start.setPiece(p);
-					p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
-					if(savedPiece != null) {
-						savedPiece.setSquare(end);
-					}
-					return false;
-				}
-				// Insurmountably important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
-				if(savedPiece != null) savedPiece.setAlive(false);  
-				
-				// Pawn promotion check
-				int yCoord = end.getPosition()[1];
-				if(p instanceof Pawn && (yCoord == 0 || yCoord == 7)) {
-					Piece newPiece = checkPawnPromotion(end);
-					end.setPiece(newPiece); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
-					mh.replacePiece(p, newPiece, p.getTeam());// reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
-				}
-				mh.incrementTurn();
-				return true;
-			}
-		}
-		
-		return false;
-	}
 	
 	public Piece checkPawnPromotion(Square s) {
 		/**
@@ -198,7 +165,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		super.paintComponent(g);
 		for (int x = 0; x < 8; x++) { // initialize all of the squares
 			for (int y = 0; y < 8; y++) {
-				squares[x][y].paintComponent(g);
+				mh.getSquaresArray()[x][y].paintComponent(g);
 			}
 		}
 		if (pieceSquare != null) {
@@ -238,8 +205,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			pieceSquare.setDisplayPiece(true);
 			pieceSquare = null;
 		} else if (pieceSquare != null) { // if they are not the same object and a piece is selected
-			boolean result = AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
+			boolean result = mh.AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
+				System.out.println(ai.minimax(mh.clone(), 4, 0, 0, mh.getTurn() == 0));
+				
 				switch(mh.checkWin()) {
 				case 0:
 					break;

@@ -20,7 +20,7 @@ public abstract class Piece {
 	protected Square square;
 	private int team;
 	private int size = 80;
-	private boolean isAlive = true;
+	protected boolean isAlive = true;
 	
 	public Piece(Square startSquare, int color, String imgLocation) {
 		/**
@@ -36,9 +36,10 @@ public abstract class Piece {
 		}
 	}
 	
-	public Piece(Square startSquare, int color) {
+	public Piece(Square startSquare, int color, boolean isAlive) {
 		square = startSquare;
 		this.team = color;
+		this.isAlive = isAlive;
 	}
 	
 	public boolean move(Square end, MoveHandler mh) {

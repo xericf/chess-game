@@ -24,11 +24,7 @@ Pros to talk about:
 - The abstract function for legal moves and getValue, and how it makes things a lot easier and less costly for memory and performance.
 
 TODO:
-- Reduce the amount of repaints there are using logic.
-Remember, no legal moves on king and it is in chevk means checkmate, if it is not in check then it is stalemate.
+-  Optimize the AI by changing the AttemptMove function.
 
-Checking for stalemate should be easy, just check each piece's legal moves each turn end.
-For checkmate, Check legal moves of each piece and see if it covers all of the legal moves of the king, then see if there could be any blocks or captures that could prevent mate.
-
--Probably need to remove DisplayPiece function because it's a bit useless and may be expensive for the AI (Unless i just don't use DisplayPiece in AI since it doesn't need to render until it moves...)
--Absolutely need to remove the use of the try..catch function in the King because it will be very expensive when making the AI.
+Exception in thread "AWT-EventQueue-0" java.lang.NullPointerException
+	at engine.pieces.King.move(King.java:48)

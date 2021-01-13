@@ -14,8 +14,8 @@ public class Queen extends Piece {
 		super(startSquare, color, imgLocation);
 	}
 	
-	public Queen(Square startSquare, int color) {
-		super(startSquare, color);
+	public Queen(Square startSquare, int color, boolean isAlive) {
+		super(startSquare, color, isAlive);
 		this.startSquare = startSquare;
 		this.color = color;
 	}
@@ -90,7 +90,7 @@ public class Queen extends Piece {
 
 	@Override
 	public Queen clone() {
-		return new Queen(startSquare, color);
+		return new Queen(startSquare, color, isAlive);
 	}
 
 }

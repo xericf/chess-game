@@ -15,8 +15,8 @@ public class Pawn extends Piece {
 	public Pawn(Square startSquare, int team, String imgLocation) {
 		super(startSquare, team, imgLocation); // will just call the Piece constructor..
 	}
-	public Pawn(Square startSquare, int team, int turnMoved) {
-		super(startSquare, team);
+	public Pawn(Square startSquare, int team, int turnMoved, boolean isAlive) {
+		super(startSquare, team, isAlive);
 		this.turnMoved = turnMoved;
 		this.startSquare = startSquare;
 		this.team = team;
@@ -151,7 +151,7 @@ public class Pawn extends Piece {
 	@Override
 	public Pawn clone() {
 		// TODO Auto-generated method stub
-		return new Pawn(startSquare, team, turnMoved);
+		return new Pawn(startSquare, team, turnMoved, isAlive);
 	}
 
 }

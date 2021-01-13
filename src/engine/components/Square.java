@@ -31,7 +31,6 @@ public class Square extends JComponent {
 		this.displayPiece = false;
 		this.piece = null; // empty square
 		this.color = color;
-		
 	}
 	
 	public MoveHandler getMoveHandler() {
@@ -59,6 +58,10 @@ public class Square extends JComponent {
 		 * Will just return the piece type
 		 * */
 		return this.piece;
+	}
+	
+	public Square clone(MoveHandler newHandler) {
+		return new Square(x, y, squareSize, color, newHandler);
 	}
 	
 	@Override

@@ -20,8 +20,8 @@ public class King extends Piece {
 		hasMoved = false;
 	}
 	
-	public King(Square startSquare, int color, boolean hasMoved) {
-		super(startSquare, color);
+	public King(Square startSquare, int color, boolean hasMoved, boolean isAlive) {
+		super(startSquare, color, isAlive);
 		this.hasMoved = hasMoved;
 	}
 	
@@ -133,6 +133,6 @@ public class King extends Piece {
 	@Override
 	public King clone() {
 		// TODO Auto-generated method stub
-		return new King(square, color, hasMoved);
+		return new King(startSquare, color, hasMoved, isAlive);
 	}
 }

@@ -17,8 +17,8 @@ public class Rook extends Piece {
 		super(startSquare, color, imgLocation);
 		hasMoved = false;
 	}
-	public Rook(Square startSquare, int color, boolean hasMoved) {
-		super(startSquare, color);
+	public Rook(Square startSquare, int color, boolean hasMoved, boolean isAlive) {
+		super(startSquare, color, isAlive);
 		this.hasMoved = hasMoved;
 		this.startSquare = startSquare;
 		this.color = color;
@@ -82,7 +82,7 @@ public class Rook extends Piece {
 	@Override
 	public Rook clone() {
 		// TODO Auto-generated method stub
-		return new Rook(startSquare, color, hasMoved);
+		return new Rook(startSquare, color, hasMoved, isAlive);
 	}
 
 }

@@ -27,8 +27,8 @@ public class Knight extends Piece {
 		super(startSquare, color, imgLocation);
 	}
 	
-	public Knight(Square startSquare, int color) {
-		super(startSquare, color);
+	public Knight(Square startSquare, int color, boolean isAlive) {
+		super(startSquare, color, isAlive);
 		this.startSquare = startSquare;
 		this.color = color;
 	}
@@ -77,7 +77,7 @@ public class Knight extends Piece {
 	@Override
 	public Knight clone() {
 		// TODO Auto-generated method stub
-		return new Knight(startSquare, color);
+		return new Knight(startSquare, color, isAlive);
 	}
 
 }

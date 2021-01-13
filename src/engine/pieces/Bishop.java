@@ -27,8 +27,8 @@ public class Bishop extends Piece {
 		super(startSquare, color, imgLocation);
 	}
 	
-	public Bishop(Square startSquare, int color) {
-		super(startSquare, color);
+	public Bishop(Square startSquare, int color, boolean isAlive) {
+		super(startSquare, color, isAlive);
 		this.startSquare = startSquare;
 		this.color = color;
 	}
@@ -80,7 +80,7 @@ public class Bishop extends Piece {
 	@Override
 	public Bishop clone() {
 		// TODO Auto-generated method stub
-		return new Bishop(startSquare, color);
+		return new Bishop(startSquare, color, isAlive);
 	}
 
 }

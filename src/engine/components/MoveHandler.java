@@ -3,24 +3,29 @@ package engine.components;
 import java.util.ArrayList;
 
 import engine.pieces.King;
+import engine.pieces.Pawn;
 import engine.pieces.Piece;
+import engine.pieces.Queen;
 
 public class MoveHandler {
 	private Square[][] squares;
 	private int turn;
 	private boolean isChecked;
 	private int turnNumber;
+	private Board board;
 	
 	public King wk;
 	public King bk;
 	public Piece[] bp;
 	public Piece[] wp;
+	private boolean aiMode = false;
 	
-	public MoveHandler(Square[][] squares, int turn,int turnNumber, boolean isChecked,  King wk, King bk, Piece[] blackPieces, Piece[] whitePieces) {
+	public MoveHandler(Board b, Square[][] squares, int turn, int turnNumber, boolean isChecked,  King wk, King bk, Piece[] blackPieces, Piece[] whitePieces) {
 		this.squares = squares;
 		this.turn = turn;
 		this.isChecked = false;
 		this.turnNumber = turnNumber;
+		this.board = b;
 		
 		this.wk = wk;
 		this.bk = bk;
@@ -29,13 +34,95 @@ public class MoveHandler {
 
 	}
 	
+	public boolean AttemptMove(Square start, Square end) {
+		Piece p = start.getPiece();
+		Piece savedPiece = end.getPiece(); // this piece will be if the move is not allowed, and it will replace the
+		ArrayList<Square> legalMoves = p.getLegalMoves(this);
+		if(legalMoves == null) return false;
+		for(int i = 0; i < legalMoves.size(); i++) {
+			if(legalMoves.get(i) == end) {
+				p.move(end, this);
+				if(inCheck()) { 
+					// Essentially this will reverse the move if the king is put in check or already in check from the move.
+					end.setPiece(savedPiece);
+					start.setPiece(p);
+					p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
+					if(savedPiece != null) {
+						savedPiece.setSquare(end);
+					}
+					return false;
+				}
+				// important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
+				if(savedPiece != null) savedPiece.setAlive(false);  
+				
+				// Pawn promotion check
+				int yCoord = end.getPosition()[1];
+				if(p instanceof Pawn && (yCoord == 0 || yCoord == 7) && !aiMode) {
+					Piece newPiece = board.checkPawnPromotion(end);
+					end.setPiece(newPiece); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
+					replacePiece(p, newPiece, p.getTeam());// reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
+				}
+				incrementTurn();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean ComputerMove(Square start, Square end) {
+		Piece p = start.getPiece();
+		Piece savedPiece = end.getPiece(); // this piece will be if the move is not allowed, and it will replace the
+		p.move(end, this);
+		if(inCheck()) { 
+			// Essentially this will reverse the move if the king is put in check or already in check from the move.
+			end.setPiece(savedPiece);
+			start.setPiece(p);
+			p.setSquare(start); // IMPORTANT MUST SET THE SQUARES BACK OR ELSE IT THINKS ITS POSITIONS ARE DIFFERENT
+			if(savedPiece != null) {
+				savedPiece.setSquare(end);
+			}
+			return false;
+		}
+		// important as when pieces are considered for their legal moves in the detectors, it needs to consider if the piece is on the board or not.
+		if(savedPiece != null) savedPiece.setAlive(false);  
+		
+		// Pawn promotion check
+		int yCoord = end.getPosition()[1];
+		if(p instanceof Pawn && (yCoord == 0 || yCoord == 7)) {
+			String prefix = turn == 0 ? "w" : "b";
+			Piece newPiece = new Queen(end, turn, "resources/"+ prefix + "queen.png");;
+			end.setPiece(newPiece); //VERY important to get the piece on the board and rendered, this will fully remove all traces of the pawn piece that used to be there
+			replacePiece(p, newPiece, p.getTeam());// reassign the piece to the new Piece that is created, needs to be reassigned to work with the conditions piece array
+		}
+		incrementTurn();
+		return true;
+
+	}
+	
 	public MoveHandler clone() {
-		Square newSquares[][] = squares.clone();
-		Piece[] newBp = bp.clone();
-		Piece[] newWp = wp.clone();
-		King newBk = bk.clone();
-		King newWk = wk.clone();
-		return new MoveHandler(newSquares, turn, turnNumber, isChecked, newWk, newBk, newBp, newWp);
+		Square newSquares[][] = Board.initSquares(80, this);
+		Piece[] newBp = new Piece[bp.length];
+		Piece[] newWp = new Piece[wp.length];
+		King newWk = null;
+		King newBk = null;
+		for(int i = 0; i < bp.length; i++) {
+			newBp[i] = bp[i].clone();
+			int pos[] = bp[i].getSquare().getPosition();
+			Square sq = newSquares[pos[0]][pos[1]];
+			newBp[i].setSquare(sq);
+			sq.setPiece(newBp[i]);
+			if(newBp[i] instanceof King) newBk = (King) newBp[i];
+		}
+		for(int i = 0; i < wp.length; i++) {
+			newWp[i] = wp[i].clone();
+			int pos[] = wp[i].getSquare().getPosition();
+			Square sq = newSquares[pos[0]][pos[1]];
+			newWp[i].setSquare(sq);
+			sq.setPiece(newWp[i]);
+			if(newWp[i] instanceof King) newWk = (King) newWp[i];
+		}
+		return new MoveHandler(board, newSquares, turn, turnNumber, isChecked, newWk, newBk, newBp, newWp);
 	}
 	
 	public boolean inCheck() {
@@ -105,6 +192,10 @@ public class MoveHandler {
 			}
 		}
 		return false;
+	}
+	
+	public void setAIMode(boolean s) {
+		this.aiMode = s;
 	}
 	
 	public void incrementTurn() {
