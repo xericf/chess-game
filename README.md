@@ -28,3 +28,5 @@ TODO:
 
 Exception in thread "AWT-EventQueue-0" java.lang.NullPointerException
 	at engine.pieces.King.move(King.java:48)
+	
+to replicate: 1. h4 e5 2. a3 qxh4 on depth 3

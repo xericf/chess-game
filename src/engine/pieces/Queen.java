@@ -90,7 +90,7 @@ public class Queen extends Piece {
 
 	@Override
 	public Queen clone() {
-		return new Queen(startSquare, color, isAlive);
+		return new Queen(startSquare, getTeam(), isAlive);
 	}
 
 }

@@ -207,10 +207,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		} else if (pieceSquare != null) { // if they are not the same object and a piece is selected
 			boolean result = mh.AttemptMove(pieceSquare, sq); // If the move was allowed/done or not.
 			if(result) {
-				System.out.println(ai.minimax(mh.clone(), 4, 0, 0, mh.getTurn() == 0));
-				
 				switch(mh.checkWin()) {
 				case 0:
+					//float eval = ai.minimax(mh.clone(), 2, -10000, 10000, mh.getTurn() == 0);
+					//System.out.println(eval);
+					ai.playBestMove(2, false);
 					break;
 				case 1:
 					System.out.println("Checkmate");

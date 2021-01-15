@@ -80,7 +80,7 @@ public class Bishop extends Piece {
 	@Override
 	public Bishop clone() {
 		// TODO Auto-generated method stub
-		return new Bishop(startSquare, color, isAlive);
+		return new Bishop(startSquare, getTeam(), isAlive);
 	}
 
 }

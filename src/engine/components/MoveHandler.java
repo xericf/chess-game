@@ -106,6 +106,7 @@ public class MoveHandler {
 		Piece[] newWp = new Piece[wp.length];
 		King newWk = null;
 		King newBk = null;
+
 		for(int i = 0; i < bp.length; i++) {
 			newBp[i] = bp[i].clone();
 			int pos[] = bp[i].getSquare().getPosition();
@@ -122,6 +123,7 @@ public class MoveHandler {
 			sq.setPiece(newWp[i]);
 			if(newWp[i] instanceof King) newWk = (King) newWp[i];
 		}
+
 		return new MoveHandler(board, newSquares, turn, turnNumber, isChecked, newWk, newBk, newBp, newWp);
 	}
 	

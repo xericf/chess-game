@@ -82,7 +82,7 @@ public class Rook extends Piece {
 	@Override
 	public Rook clone() {
 		// TODO Auto-generated method stub
-		return new Rook(startSquare, color, hasMoved, isAlive);
+		return new Rook(startSquare, getTeam(), hasMoved, isAlive);
 	}
 
 }

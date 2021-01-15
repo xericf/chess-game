@@ -77,7 +77,7 @@ public class Knight extends Piece {
 	@Override
 	public Knight clone() {
 		// TODO Auto-generated method stub
-		return new Knight(startSquare, color, isAlive);
+		return new Knight(startSquare, getTeam(), isAlive);
 	}
 
 }

@@ -133,6 +133,6 @@ public class King extends Piece {
 	@Override
 	public King clone() {
 		// TODO Auto-generated method stub
-		return new King(startSquare, color, hasMoved, isAlive);
+		return new King(startSquare, getTeam(), hasMoved, isAlive);
 	}
 }

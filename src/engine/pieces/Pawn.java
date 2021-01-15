@@ -57,7 +57,7 @@ public class Pawn extends Piece {
 		int[] position = this.square.getPosition(); // specifying this in reference to the protected square Square value
 		int team = this.getTeam();
 		int turnNumber = mh.getTurnNumber();
-		
+
 		if(team == 0) { // 0 is white
 			int offset = position[1] == 6 ? 2 : 1;  // if white's pawn are on their starting square, they can potentially move twice
 			for(int y = position[1]-1; y >= position[1] - offset; y--) { // check 2 moves backward (up) in the y position
@@ -142,6 +142,10 @@ public class Pawn extends Piece {
 		}
 		return moves;
 	}
+	
+	public int turnMoved() {
+		return this.turnMoved;
+	}
 
 	@Override
 	public float getValue() {
@@ -151,7 +155,7 @@ public class Pawn extends Piece {
 	@Override
 	public Pawn clone() {
 		// TODO Auto-generated method stub
-		return new Pawn(startSquare, team, turnMoved, isAlive);
+		return new Pawn(startSquare, getTeam(), turnMoved, isAlive);
 	}
 
 }
